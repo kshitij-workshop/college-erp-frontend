@@ -1,0 +1,177 @@
+import { useEffect, useState } from "react";
+
+import { getStudents } from "@/api/studentApi";
+import { getDepartments } from "@/api/academicApi";
+
+export function useStudents() {
+
+  const [students, setStudents] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const [page, setPage] = useState(0);
+  const size = 10;
+
+  const [keyword, setKeyword] = useState("");
+
+  const [pagination, setPagination] = useState({
+    totalPages: 0,
+    totalElements: 0,
+  });
+
+  // ===============================
+  // Filters
+  // ===============================
+
+  const [filters, setFilters] = useState({
+    departmentId: "",
+    programId: "",
+    batchId: "",
+    semesterId: "",
+    sectionId: "",
+    status: "",
+  });
+
+  // ===============================
+  // Dropdown Data
+  // ===============================
+
+  const [departments, setDepartments] = useState([]);
+
+  // ===============================
+  // Filter Change
+  // ===============================
+
+  const handleFilterChange = (key, value) => {
+
+    setFilters((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+
+    setPage(0);
+
+  };
+
+  // ===============================
+  // Load Departments
+  // ===============================
+
+  async function loadDepartments() {
+
+    try {
+
+      const response = await getDepartments();
+
+      setDepartments(response.data.data);
+
+    } catch (error) {
+
+      console.error(error);
+
+    }
+
+  }
+
+  // ===============================
+  // Fetch Students
+  // ===============================
+
+  async function fetchStudents() {
+
+    try {
+
+      setLoading(true);
+
+      const response = await getStudents({
+
+        page,
+
+        size,
+
+        keyword,
+
+        ...filters,
+
+      });
+
+      const data = response.data.data;
+
+      setStudents(data.content);
+
+      setPagination({
+
+        totalPages: data.totalPages,
+
+        totalElements: data.totalElements,
+
+      });
+
+    } catch (error) {
+
+      console.error(error);
+
+    } finally {
+
+      setLoading(false);
+
+    }
+
+  }
+
+  // ===============================
+  // Refresh
+  // ===============================
+
+  function refresh() {
+
+    fetchStudents();
+
+  }
+
+  // ===============================
+  // Effects
+  // ===============================
+
+  useEffect(() => {
+
+    loadDepartments();
+
+  }, []);
+
+  useEffect(() => {
+
+    fetchStudents();
+
+  }, [page, keyword, filters]);
+
+  // ===============================
+  // Return
+  // ===============================
+
+  return {
+
+    students,
+
+    loading,
+
+    page,
+
+    setPage,
+
+    keyword,
+
+    setKeyword,
+
+    pagination,
+
+    filters,
+
+    handleFilterChange,
+
+    departments,
+
+    refresh,
+
+  };
+
+}
