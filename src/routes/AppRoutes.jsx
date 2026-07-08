@@ -10,6 +10,7 @@ import DashboardHome from "@/pages/dashboard/DashboardHome";
 import StudentsPage from "@/pages/students/StudentsPage";
 
 import ProtectedRoute from "./ProtectedRoute";
+import FacultyPage from "@/pages/faculty/FacultyPage";
 
 export default function AppRoutes() {
 
@@ -52,6 +53,11 @@ export default function AppRoutes() {
         <Route
           path="students"
           element={<StudentsPage />}
+        />
+
+        <Route
+          path="faculty"
+          element={<FacultyPage />}
         />
 
       </Route>

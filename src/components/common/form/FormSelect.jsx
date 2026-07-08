@@ -15,6 +15,7 @@ export default function FormSelect({
   placeholder,
   options = [],
   onValueChange,
+  isNumber = true,
 }) {
   return (
     <Controller
@@ -31,16 +32,20 @@ export default function FormSelect({
             value={field.value ? String(field.value) : ""}
             onValueChange={(value) => {
 
-              field.onChange(Number(value));
+              const parsedValue = isNumber
+                ? Number(value)
+                : value;
 
-              onValueChange?.(Number(value));
+              field.onChange(parsedValue);
+
+              onValueChange?.(parsedValue);
 
             }}
           >
 
-            <SelectTrigger className="w-full min-w-0 h-11 rounded-xl" >
+            <SelectTrigger className="h-11 w-full rounded-xl">
 
-              <SelectValue className="truncate" placeholder={placeholder} />
+              <SelectValue placeholder={placeholder} />
 
             </SelectTrigger>
 
@@ -62,9 +67,11 @@ export default function FormSelect({
           </Select>
 
           {fieldState.error && (
+
             <p className="text-sm text-red-500">
               {fieldState.error.message}
             </p>
+
           )}
 
         </div>
