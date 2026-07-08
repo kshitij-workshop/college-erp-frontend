@@ -11,30 +11,27 @@ import StudentsPage from "@/pages/students/StudentsPage";
 
 import ProtectedRoute from "./ProtectedRoute";
 import FacultyPage from "@/pages/faculty/FacultyPage";
+import DepartmentPage from "@/pages/department/DepartmentPage";
 
 export default function AppRoutes() {
-
   const { user, loading } = useAuth();
 
   if (loading) return null;
 
   return (
-
     <Routes>
-
       <Route
         path="/"
         element={
-          user
-            ? <Navigate to="/dashboard" replace />
-            : <Navigate to="/login" replace />
+          user ? (
+            <Navigate to="/dashboard" replace />
+          ) : (
+            <Navigate to="/login" replace />
+          )
         }
       />
 
-      <Route
-        path="/login"
-        element={<Login />}
-      />
+      <Route path="/login" element={<Login />} />
 
       <Route
         path="/dashboard"
@@ -44,31 +41,15 @@ export default function AppRoutes() {
           </ProtectedRoute>
         }
       >
+        <Route index element={<DashboardHome />} />
 
-        <Route
-          index
-          element={<DashboardHome />}
-        />
+        <Route path="students" element={<StudentsPage />} />
 
-        <Route
-          path="students"
-          element={<StudentsPage />}
-        />
-
-        <Route
-          path="faculty"
-          element={<FacultyPage />}
-        />
-
+        <Route path="faculty" element={<FacultyPage />} />
+        <Route path="departments" element={<DepartmentPage />} />
       </Route>
 
-      <Route
-        path="*"
-        element={<Navigate to="/" replace />}
-      />
-
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
-
   );
-
 }
