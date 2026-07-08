@@ -2,32 +2,32 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import ConfirmDialog from "@/components/common/ConfirmDialog";
-import { deleteDepartment } from "@/api/departmentApi";
+import { deleteProgram } from "@/api/programApi";
 
-export default function DeleteDepartmentDialog({
+export default function DeleteProgramDialog({
   open,
   onOpenChange,
-  department,
+  program,
   refresh,
 }) {
   const [loading, setLoading] = useState(false);
 
   async function handleDelete() {
-    if (!department) return;
+    if (!program) return;
 
     try {
       setLoading(true);
 
-      await deleteDepartment(department.id);
+      await deleteProgram(program.id);
 
-      toast.success("Department deleted successfully");
+      toast.success("Program deleted successfully");
 
       refresh?.();
 
       onOpenChange(false);
     } catch (error) {
       toast.error(
-        error?.response?.data?.message || "Unable to delete department",
+        error?.response?.data?.message || "Unable to delete program",
       );
     } finally {
       setLoading(false);
@@ -38,8 +38,8 @@ export default function DeleteDepartmentDialog({
     <ConfirmDialog
       open={open}
       onOpenChange={onOpenChange}
-      title="Delete Department"
-      description={`Are you sure you want to delete "${department?.name}"? This action cannot be undone.`}
+      title="Delete Program"
+      description={`Are you sure you want to delete "${program?.name}"? This action cannot be undone.`}
       confirmText={loading ? "Deleting..." : "Delete"}
       onConfirm={handleDelete}
       loading={loading}
