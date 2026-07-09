@@ -14,6 +14,7 @@ import FacultyPage from "@/pages/faculty/FacultyPage";
 import DepartmentPage from "@/pages/department/DepartmentPage";
 import ProgramPage from "@/pages/program/ProgramPage";
 import BatchPage from "@/pages/batch/BatchPage";
+import SemesterPage from "@/pages/semester/SemesterPage";
 
 export default function AppRoutes() {
   const { user, loading } = useAuth();
@@ -51,6 +52,8 @@ export default function AppRoutes() {
         <Route path="departments" element={<DepartmentPage />} />
         <Route path="programs" element={<ProgramPage />} />
         <Route path="batches" element={<BatchPage />} />
+        <Route path="semesters" element={<SemesterPage />} />
+
 
       </Route>
 
