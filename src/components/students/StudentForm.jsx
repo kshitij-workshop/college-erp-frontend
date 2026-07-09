@@ -23,20 +23,15 @@ export default function StudentForm({
   submitLabel = "Save",
 }) {
   return (
-    <form
-      onSubmit={form.handleSubmit(onSubmit)}
-      className="space-y-8"
-    >
+    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
       {/* ================= Personal Information ================= */}
 
       <div className="rounded-2xl border border-slate-200 bg-slate-50/40 p-6 shadow-sm">
-
         <h3 className="mb-6 flex items-center gap-2 text-lg font-semibold">
-    👤 Personal Information
-</h3>
+          👤 Personal Information
+        </h3>
 
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-
           <FormInput
             control={form.control}
             name="fullName"
@@ -79,21 +74,17 @@ export default function StudentForm({
             label="Guardian Relation"
             placeholder="Father"
           />
-
         </div>
-
       </div>
 
       {/* ================= Academic Information ================= */}
 
       <div className="rounded-2xl border border-slate-200 bg-slate-50/40 p-6 shadow-sm">
-
         <h3 className="mb-6 flex items-center gap-2 text-lg font-semibold">
-    🎓 Academic Information
-</h3>
+          🎓 Academic Information
+        </h3>
 
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-
           <FormSelect
             control={form.control}
             name="departmentId"
@@ -127,6 +118,7 @@ export default function StudentForm({
             label="Semester"
             placeholder="Select Semester"
             options={semesters}
+            getOptionLabel={(semester) => `Semester ${semester.semesterNumber}`}
             onValueChange={handleSemesterChange}
           />
 
@@ -137,35 +129,20 @@ export default function StudentForm({
             placeholder="Select Section"
             options={sections}
           />
-
         </div>
-
       </div>
 
       {/* ================= Footer ================= */}
 
-     <div className="flex items-center justify-end gap-3 border-t pt-6">
+      <div className="flex items-center justify-end gap-3 border-t pt-6">
+        <Button type="button" variant="outline">
+          Cancel
+        </Button>
 
-    <Button
-        type="button"
-        variant="outline"
-    >
-        Cancel
-    </Button>
-
-    <Button
-        type="submit"
-        disabled={loading}
-    >
-
-        {loading
-            ? "Saving..."
-            : submitLabel}
-
-    </Button>
-
-</div>
-
+        <Button type="submit" disabled={loading}>
+          {loading ? "Saving..." : submitLabel}
+        </Button>
+      </div>
     </form>
   );
 }

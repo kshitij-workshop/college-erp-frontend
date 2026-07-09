@@ -15,6 +15,8 @@ export default function FormSelect({
   placeholder,
   options = [],
   onValueChange,
+  getOptionLabel = (item) => item.name,
+  getOptionValue = (item) => item.id,
   isNumber = true,
 }) {
   return (
@@ -23,57 +25,37 @@ export default function FormSelect({
       name={name}
       render={({ field, fieldState }) => (
         <div className="space-y-2 min-w-0">
-
-          <label className="text-sm font-medium">
-            {label}
-          </label>
+          <label className="text-sm font-medium">{label}</label>
 
           <Select
             value={field.value ? String(field.value) : ""}
             onValueChange={(value) => {
-
-              const parsedValue = isNumber
-                ? Number(value)
-                : value;
+              const parsedValue = isNumber ? Number(value) : value;
 
               field.onChange(parsedValue);
 
               onValueChange?.(parsedValue);
-
             }}
           >
-
             <SelectTrigger className="h-11 w-full rounded-xl">
-
               <SelectValue placeholder={placeholder} />
-
             </SelectTrigger>
 
             <SelectContent>
-
               {options.map((item) => (
-
                 <SelectItem
-                  key={item.id}
-                  value={String(item.id)}
+                  key={getOptionValue(item)}
+                  value={String(getOptionValue(item))}
                 >
-                  {item.name}
+                  {getOptionLabel(item)}
                 </SelectItem>
-
               ))}
-
             </SelectContent>
-
           </Select>
 
           {fieldState.error && (
-
-            <p className="text-sm text-red-500">
-              {fieldState.error.message}
-            </p>
-
+            <p className="text-sm text-red-500">{fieldState.error.message}</p>
           )}
-
         </div>
       )}
     />
