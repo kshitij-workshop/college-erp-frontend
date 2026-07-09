@@ -13,6 +13,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import FacultyPage from "@/pages/faculty/FacultyPage";
 import DepartmentPage from "@/pages/department/DepartmentPage";
 import ProgramPage from "@/pages/program/ProgramPage";
+import BatchPage from "@/pages/batch/BatchPage";
 
 export default function AppRoutes() {
   const { user, loading } = useAuth();
@@ -49,6 +50,8 @@ export default function AppRoutes() {
         <Route path="faculty" element={<FacultyPage />} />
         <Route path="departments" element={<DepartmentPage />} />
         <Route path="programs" element={<ProgramPage />} />
+        <Route path="batches" element={<BatchPage />} />
+
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />
