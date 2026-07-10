@@ -13,10 +13,7 @@ import DeleteStudentDialog from "@/components/students/DeleteStudentDialog";
 import StudentPagination from "@/components/students/StudentPagination";
 import StudentSkeleton from "@/components/students/StudentSkeleton";
 
-
 export default function StudentsPage() {
-
-    
   const {
     students,
     loading,
@@ -33,6 +30,7 @@ export default function StudentsPage() {
     handleFilterChange,
 
     departments,
+    semesters,
 
     refresh,
   } = useStudents();
@@ -72,7 +70,6 @@ export default function StudentsPage() {
 
   return (
     <div className="space-y-6">
-
       {/* Header */}
 
       <PageHeader
@@ -89,26 +86,16 @@ export default function StudentsPage() {
         search={keyword}
         onSearchChange={setKeyword}
         placeholder="Search students..."
-
         filters={filters}
-
         filterOptions={{
           departmentId: departments,
 
-          status: [
-            {
-              id: "ACTIVE",
-              name: "Active",
-            },
-            {
-              id: "INACTIVE",
-              name: "Inactive",
-            },
-          ],
+          semesterId: semesters.map((semester) => ({
+            id: semester.semesterNumber,
+            name: `Semester ${semester.semesterNumber}`,
+          })),
         }}
-
         onFilterChange={handleFilterChange}
-
         onRefresh={refresh}
       />
 
@@ -160,7 +147,6 @@ export default function StudentsPage() {
         student={deleteStudent}
         refresh={refresh}
       />
-
     </div>
   );
 }

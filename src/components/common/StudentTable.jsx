@@ -46,30 +46,20 @@ export default function StudentTable({
     <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-200">
       <Table>
         <TableHeader className="sticky top-0 z-10 bg-slate-50">
-          <TableRow className="h-20 transition-colors hover:bg-slate-50">
-            <TableHead className="py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">
-              Student
-            </TableHead>
+          <TableRow className="h-16">
+            <TableHead>Student</TableHead>
 
-            <TableHead className="py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">
-              Enrollment
-            </TableHead>
+            <TableHead>Roll No</TableHead>
 
-            <TableHead className="py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">
-              Department
-            </TableHead>
+            <TableHead>Reg. No.</TableHead>
 
-            <TableHead className="py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">
-              Program
-            </TableHead>
+            <TableHead>Dept</TableHead>
 
-            <TableHead className="py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">
-              Semester
-            </TableHead>
+            <TableHead>Sem</TableHead>
 
-            <TableHead className="py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">
-              Status
-            </TableHead>
+            <TableHead>Mobile</TableHead>
+
+            <TableHead>Status</TableHead>
 
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
@@ -107,28 +97,36 @@ export default function StudentTable({
                 </div>
               </TableCell>
 
-              {/* Enrollment */}
+              {/* Roll Number */}
 
               <TableCell>
-                <span className="rounded-md bg-slate-100 px-2 py-1 font-mono text-xs">
-                  {student.enrollmentNumber}
+                <span className="font-mono font-medium">
+                  {student.rollNumber}
+                </span>
+              </TableCell>
+
+              {/* Registration Number */}
+
+              <TableCell>
+                <span className="font-mono font-medium">
+                  {student.registrationNumber}
                 </span>
               </TableCell>
 
               {/* Department */}
 
-              <TableCell>{student.departmentName}</TableCell>
-
-              {/* Program */}
-
-              <TableCell>{student.programName}</TableCell>
+              <TableCell>{student.departmentCode}</TableCell>
 
               {/* Semester */}
 
               <TableCell>
-                <Badge variant="outline">
-                  Semester {student.semesterNumber}
-                </Badge>
+                <Badge variant="outline">Sem {student.semesterNumber}</Badge>
+              </TableCell>
+
+              {/* Mobile */}
+
+              <TableCell>
+                <span className="font-mono font-medium">{student.phone}</span>
               </TableCell>
 
               {/* Status */}

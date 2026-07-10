@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import { getStudents } from "@/api/studentApi";
 import { getDepartments } from "@/api/academicApi";
+import { getAllSemesters } from "@/api/academicApi";
 
 export function useStudents() {
 
@@ -36,6 +37,7 @@ export function useStudents() {
   // ===============================
 
   const [departments, setDepartments] = useState([]);
+  const [semesters, setSemesters] = useState([]);
 
   // ===============================
   // Filter Change
@@ -71,6 +73,15 @@ export function useStudents() {
     }
 
   }
+
+  useEffect(() => {
+  async function loadSemesters() {
+    const res = await getAllSemesters(); // or your API
+    setSemesters(res.data.data);
+  }
+
+  loadSemesters();
+}, []);
 
   // ===============================
   // Fetch Students
@@ -169,6 +180,7 @@ export function useStudents() {
     handleFilterChange,
 
     departments,
+    semesters,
 
     refresh,
 

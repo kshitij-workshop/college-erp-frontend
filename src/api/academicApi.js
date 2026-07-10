@@ -14,3 +14,6 @@ export const getSemesters = (batchId) =>
 
 export const getSections = (semesterId) =>
   api.get(`/sections/semester/${semesterId}`);
+
+export const getAllSemesters = () =>
+  api.get("/semesters");
