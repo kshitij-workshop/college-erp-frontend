@@ -45,9 +45,7 @@ export const studentSchema = z.object({
 
   registrationNumber: z
     .string()
-    .trim()
-    .min(1, "Registration number is required"),
-
+    .trim(),
   admissionDate: z.string().min(1, "Admission date is required"),
 
   status: z.string().min(1, "Status is required"),
