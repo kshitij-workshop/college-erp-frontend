@@ -1,7 +1,7 @@
 const GENDER_OPTIONS = [
   { value: "MALE", label: "Male" },
   { value: "FEMALE", label: "Female" },
-  { value: "OTHER", label: "Other" }
+  { value: "OTHER", label: "Other" },
 ];
 
 const BLOOD_GROUP_OPTIONS = [
@@ -12,7 +12,7 @@ const BLOOD_GROUP_OPTIONS = [
   { value: "AB_POSITIVE", label: "AB+" },
   { value: "AB_NEGATIVE", label: "AB-" },
   { value: "O_POSITIVE", label: "O+" },
-  { value: "O_NEGATIVE", label: "O-" }
+  { value: "O_NEGATIVE", label: "O-" },
 ];
 
 const STUDENT_STATUS_OPTIONS = [
@@ -23,9 +23,29 @@ const STUDENT_STATUS_OPTIONS = [
   { value: "SUSPENDED", label: "Suspended" },
 ];
 
-export {
-  GENDER_OPTIONS,
-  BLOOD_GROUP_OPTIONS,
-  STUDENT_STATUS_OPTIONS
-}; 
+const SUBJECT_TYPE_OPTIONS = [
+  {
+    value: "THEORY",
+    label: "Theory",
+  },
 
+  {
+    value: "LAB",
+    label: "Lab",
+  },
+
+  {
+    value: "ELECTIVE",
+    label: "Elective",
+  },
+];
+
+const SEMESTER_OPTIONS = Array.from(
+  { length: 8 },
+  (_, index) => ({
+    id: index + 1,
+    name: `Semester ${index + 1}`,
+  })
+);
+
+export { GENDER_OPTIONS, BLOOD_GROUP_OPTIONS, STUDENT_STATUS_OPTIONS, SUBJECT_TYPE_OPTIONS, SEMESTER_OPTIONS };

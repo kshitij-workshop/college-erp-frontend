@@ -17,3 +17,7 @@ export const getSections = (semesterId) =>
 
 export const getAllSemesters = () =>
   api.get("/semesters");
+
+export function getAllPrograms() {
+  return api.get("/programs");
+}

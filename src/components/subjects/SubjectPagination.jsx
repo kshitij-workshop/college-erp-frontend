@@ -2,7 +2,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
-export default function StudentPagination({ page, setPage, totalPages }) {
+export default function SubjectPagination({ page, setPage, totalPages }) {
   if (totalPages <= 1) return null;
 
   return (

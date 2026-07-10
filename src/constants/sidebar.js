@@ -3,10 +3,13 @@ import {
   Users,
   GraduationCap,
   Building2,
-  Layers3,
-  CalendarDays,
   Library,
   Settings,
+  CalendarRange,
+  BookOpen,
+  LayoutGrid,
+  UserCog,
+  BookPlus
 } from "lucide-react";
 
 export const sidebarItems = [
@@ -22,7 +25,7 @@ export const sidebarItems = [
   },
   {
     title: "Faculty",
-    icon: GraduationCap,
+    icon: UserCog,
     href: "/dashboard/faculty",
   },
   {
@@ -32,13 +35,28 @@ export const sidebarItems = [
   },
   {
     title: "Programs",
-    icon: Layers3,
+    icon: GraduationCap,
     href: "/dashboard/programs",
   },
   {
+    title: "Batches",
+    icon: CalendarRange,
+    href: "/dashboard/batches",
+  },
+  {
     title: "Semesters",
-    icon: CalendarDays,
+    icon: BookOpen,
     href: "/dashboard/semesters",
+  },
+  {
+    title: "Sections",
+    icon: LayoutGrid,
+    href: "/dashboard/sections",
+  },
+  {
+    title: "Subjects",
+    icon: BookPlus,
+    href: "/dashboard/subjects",
   },
   {
     title: "Library",
