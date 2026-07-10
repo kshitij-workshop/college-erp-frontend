@@ -6,6 +6,8 @@ import { toast } from "sonner";
 import { studentSchema } from "@/schemas/studentSchema";
 import { defaultStudentValues } from "@/constants/studentDefaults";
 
+import { createStudent, updateStudent } from "@/api/studentApi";
+
 import {
   getDepartments,
   getPrograms,
@@ -14,16 +16,13 @@ import {
   getSections,
 } from "@/api/academicApi";
 
-import {
-  createStudent,
-  updateStudent,
-} from "@/api/studentApi";
-
 export function useStudentForm(student = null, onSuccess) {
   const form = useForm({
     resolver: zodResolver(studentSchema),
     defaultValues: defaultStudentValues,
   });
+
+  const [submitting, setSubmitting] = useState(false);
 
   const [departments, setDepartments] = useState([]);
   const [programs, setPrograms] = useState([]);
@@ -31,16 +30,14 @@ export function useStudentForm(student = null, onSuccess) {
   const [semesters, setSemesters] = useState([]);
   const [sections, setSections] = useState([]);
 
-  const [loading, setLoading] = useState(false);
-
   // ===============================
-  // Load Dropdown Data
+  // Load Dropdowns
   // ===============================
 
   async function loadDepartments() {
     try {
-      const res = await getDepartments();
-      setDepartments(res.data.data);
+      const response = await getDepartments();
+      setDepartments(response.data.data);
     } catch (error) {
       console.error(error);
       toast.error("Failed to load departments");
@@ -48,11 +45,13 @@ export function useStudentForm(student = null, onSuccess) {
   }
 
   async function loadPrograms(departmentId) {
-    if (!departmentId) return;
-
+    if (!departmentId) {
+      setPrograms([]);
+      return;
+    }
     try {
-      const res = await getPrograms(departmentId);
-      setPrograms(res.data.data);
+      const response = await getPrograms(departmentId);
+      setPrograms(response.data.data);
     } catch (error) {
       console.error(error);
       toast.error("Failed to load programs");
@@ -60,11 +59,13 @@ export function useStudentForm(student = null, onSuccess) {
   }
 
   async function loadBatches(programId) {
-    if (!programId) return;
-
+    if (!programId) {
+      setBatches([]);
+      return;
+    }
     try {
-      const res = await getBatches(programId);
-      setBatches(res.data.data);
+      const response = await getBatches(programId);
+      setBatches(response.data.data);
     } catch (error) {
       console.error(error);
       toast.error("Failed to load batches");
@@ -72,11 +73,13 @@ export function useStudentForm(student = null, onSuccess) {
   }
 
   async function loadSemesters(batchId) {
-    if (!batchId) return;
-
+    if (!batchId) {
+      setSemesters([]);
+      return;
+    }
     try {
-      const res = await getSemesters(batchId);
-      setSemesters(res.data.data);
+      const response = await getSemesters(batchId);
+      setSemesters(response.data.data);
     } catch (error) {
       console.error(error);
       toast.error("Failed to load semesters");
@@ -84,11 +87,13 @@ export function useStudentForm(student = null, onSuccess) {
   }
 
   async function loadSections(semesterId) {
-    if (!semesterId) return;
-
+    if (!semesterId) {
+      setSections([]);
+      return;
+    }
     try {
-      const res = await getSections(semesterId);
-      setSections(res.data.data);
+      const response = await getSections(semesterId);
+      setSections(response.data.data);
     } catch (error) {
       console.error(error);
       toast.error("Failed to load sections");
@@ -102,36 +107,6 @@ export function useStudentForm(student = null, onSuccess) {
   useEffect(() => {
     loadDepartments();
   }, []);
-
-  // ===============================
-  // Initialize Edit Form
-  // ===============================
-
-  useEffect(() => {
-    async function initializeEditForm() {
-      if (!student) {
-        form.reset(defaultStudentValues);
-
-        setPrograms([]);
-        setBatches([]);
-        setSemesters([]);
-        setSections([]);
-
-        return;
-      }
-
-      form.reset(student);
-
-      await loadPrograms(student.departmentId);
-      await loadBatches(student.programId);
-      await loadSemesters(student.batchId);
-      await loadSections(student.semesterId);
-    }
-
-    if (departments.length > 0) {
-      initializeEditForm();
-    }
-  }, [student, departments]);
 
   // ===============================
   // Cascading Dropdowns
@@ -187,34 +162,75 @@ export function useStudentForm(student = null, onSuccess) {
 
   async function onSubmit(values) {
     try {
-      setLoading(true);
+      setSubmitting(true);
+
+      const payload = {
+        fullName: values.fullName,
+
+        email: values.email,
+
+        phone: values.phone,
+
+        gender: values.gender,
+
+        bloodGroup: values.bloodGroup,
+
+        dateOfBirth: values.dateOfBirth,
+
+        address: values.address,
+
+        guardianName: values.guardianName,
+
+        guardianPhone: values.guardianPhone,
+
+        guardianRelation: values.guardianRelation,
+
+        departmentId: values.departmentId,
+
+        programId: values.programId,
+
+        batchId: values.batchId,
+
+        semesterId: values.semesterId,
+
+        sectionId: values.sectionId,
+
+        rollNumber: values.rollNumber,
+
+        registrationNumber: values.registrationNumber,
+
+        admissionDate: values.admissionDate,
+
+        studentStatus: values.status,
+      };
 
       if (student) {
-        await updateStudent(student.id, values);
+        await updateStudent(student.id, payload);
         toast.success("Student updated successfully");
       } else {
-        await createStudent(values);
+        await createStudent(payload);
         toast.success("Student created successfully");
       }
 
       form.reset(defaultStudentValues);
 
-      onSuccess?.();
+      setPrograms([]);
+      setBatches([]);
+      setSemesters([]);
+      setSections([]);
 
+      onSuccess?.();
     } catch (error) {
       console.error(error);
-
-      toast.error(
-        error?.response?.data?.message || "Something went wrong"
-      );
+      toast.error(error?.response?.data?.message ?? "Something went wrong");
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   }
 
   return {
     form,
-    loading,
+    submitting,
 
     departments,
     programs,

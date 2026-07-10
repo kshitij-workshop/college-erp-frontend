@@ -7,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { string } from "zod";
 
 export default function FormSelect({
   control,
@@ -15,8 +16,8 @@ export default function FormSelect({
   placeholder,
   options = [],
   onValueChange,
-  getOptionLabel = (item) => item.name,
-  getOptionValue = (item) => item.id,
+  getOptionLabel = (item) => item.name ?? item.label,
+  getOptionValue = (item) => item.id ?? item.value,
   isNumber = true,
 }) {
   return (
@@ -44,7 +45,7 @@ export default function FormSelect({
             <SelectContent>
               {options.map((item) => (
                 <SelectItem
-                  key={getOptionValue(item)}
+                  key={string(getOptionValue(item))}
                   value={String(getOptionValue(item))}
                 >
                   {getOptionLabel(item)}

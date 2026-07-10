@@ -11,7 +11,7 @@ export default function StudentDialog({
 }) {
   const {
     form,
-    loading,
+    submitting,
 
     departments,
     programs,
@@ -44,7 +44,7 @@ export default function StudentDialog({
     >
       <StudentForm
         form={form}
-        loading={loading}
+        loading={submitting}
 
         departments={departments}
         programs={programs}

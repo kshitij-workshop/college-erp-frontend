@@ -150,7 +150,7 @@ export default function StudentViewSheet({ open, onOpenChange, studentId }) {
 
                 <DetailField
                   label="Semester"
-                  value={`Semester ${student.semesterNumber}`}
+                  value={`${student.semesterNumber}`}
                 />
 
                 <DetailField
