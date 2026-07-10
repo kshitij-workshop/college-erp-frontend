@@ -17,6 +17,7 @@ import BatchPage from "@/pages/batch/BatchPage";
 import SectionPage from "@/pages/section/SectionPage";
 import SemesterPage from "@/pages/semester/SemesterPage";
 import SubjectsPage from "@/pages/subjects/SubjectsPage";
+import SubjectOfferingPage from "@/pages/subject-offerings/SubjectOfferingPage";
 
 export default function AppRoutes() {
   const { user, loading } = useAuth();
@@ -57,6 +58,7 @@ export default function AppRoutes() {
         <Route path="semesters" element={<SemesterPage />} />
         <Route path="sections" element={<SectionPage />} />
         <Route path="subjects" element={<SubjectsPage />} />
+        <Route path="subject-offerings" element={<SubjectOfferingPage />} /> 
 
 
 

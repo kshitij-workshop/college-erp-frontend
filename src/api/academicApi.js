@@ -21,3 +21,7 @@ export const getAllSemesters = () =>
 export function getAllPrograms() {
   return api.get("/programs");
 }
+
+export function getAllSections() {
+    return api.get("/sections");
+}
