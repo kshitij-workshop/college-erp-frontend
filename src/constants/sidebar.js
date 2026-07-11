@@ -64,6 +64,16 @@ export const sidebarItems = [
     href: "/dashboard/subject-offerings",
   },
   {
+    title: "rooms",
+    icon: Building2,
+    href: "/dashboard/rooms",
+  },
+  {
+    title: "time-slots",
+    icon: CalendarRange,
+    href: "/dashboard/time-slots",
+  },
+  {
     title: "Library",
     icon: Library,
     href: "/dashboard/library",

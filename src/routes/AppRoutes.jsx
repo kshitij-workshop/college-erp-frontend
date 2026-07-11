@@ -19,6 +19,7 @@ import SemesterPage from "@/pages/semester/SemesterPage";
 import SubjectsPage from "@/pages/subjects/SubjectsPage";
 import RoomsPage from "@/pages/rooms/RoomsPage";
 import SubjectOfferingPage from "@/pages/subject-offerings/SubjectOfferingPage";
+import TimeSlotsPage from "@/pages/pages/TimeSlotsPage";
 
 export default function AppRoutes() {
   const { user, loading } = useAuth();
@@ -61,6 +62,9 @@ export default function AppRoutes() {
         <Route path="subjects" element={<SubjectsPage />} />
         <Route path="subject-offerings" element={<SubjectOfferingPage />} /> 
         <Route path="rooms" element={<RoomsPage />} />
+        <Route path="time-slots" element={<TimeSlotsPage />} />
+
+
 
 
 
