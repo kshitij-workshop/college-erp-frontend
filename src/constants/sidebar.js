@@ -59,6 +59,11 @@ export const sidebarItems = [
     href: "/dashboard/subjects",
   },
   {
+    title: "Subject-offerings",
+    icon: Settings,
+    href: "/dashboard/subject-offerings",
+  },
+  {
     title: "Library",
     icon: Library,
     href: "/dashboard/library",
@@ -68,4 +73,5 @@ export const sidebarItems = [
     icon: Settings,
     href: "/dashboard/settings",
   },
+  
 ];

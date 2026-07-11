@@ -40,13 +40,31 @@ const SUBJECT_TYPE_OPTIONS = [
   },
 ];
 
-const SEMESTER_OPTIONS = Array.from(
-  { length: 8 },
-  (_, index) => ({
-    id: index + 1,
-    name: `Semester ${index + 1}`,
-  })
-);
+const SEMESTER_OPTIONS = Array.from({ length: 8 }, (_, index) => ({
+  id: index + 1,
+  name: `Semester ${index + 1}`,
+}));
 
+const ROOM_TYPE_OPTIONS = [
+  {
+    value: "CLASSROOM",
+    label: "Classroom",
+  },
+  {
+    value: "LAB",
+    label: "Laboratory",
+  },
+  {
+    value: "SEMINAR_HALL",
+    label: "Seminar Hall",
+  },
+];
 
-export { GENDER_OPTIONS, BLOOD_GROUP_OPTIONS, STUDENT_STATUS_OPTIONS, SUBJECT_TYPE_OPTIONS, SEMESTER_OPTIONS };
+export {
+  GENDER_OPTIONS,
+  BLOOD_GROUP_OPTIONS,
+  STUDENT_STATUS_OPTIONS,
+  SUBJECT_TYPE_OPTIONS,
+  SEMESTER_OPTIONS,
+  ROOM_TYPE_OPTIONS,
+};
