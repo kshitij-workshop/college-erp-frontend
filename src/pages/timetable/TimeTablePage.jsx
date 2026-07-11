@@ -95,7 +95,7 @@ export default function TimetablePage() {
           batchId: {
             label: "Batch",
             options: batches,
-            getOptionLabel: (batch) => batch.name,
+            getOptionLabel: (batch) => `${batch.name} . ${batch.departmentName}`,
           },
 
           semesterId: {

@@ -41,7 +41,7 @@ export default function TimetableForm({
             placeholder="Select subject offering"
             options={subjectOfferings}
             getOptionLabel={(offering) =>
-              `${offering.subjectCode} • ${offering.subjectName}`
+              `${offering.subjectCode} • ${offering.subjectName} • SEC-${offering.sectionName}`
             }
           />
 

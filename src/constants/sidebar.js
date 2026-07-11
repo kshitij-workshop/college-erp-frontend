@@ -79,6 +79,11 @@ export const sidebarItems = [
     href: "/dashboard/library",
   },
   {
+    title: "Time Table",
+    icon: BookOpen,
+    href: "/dashboard/timetable",
+  },
+  {
     title: "Settings",
     icon: Settings,
     href: "/dashboard/settings",
