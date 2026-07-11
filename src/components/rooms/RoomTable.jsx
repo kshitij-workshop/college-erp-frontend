@@ -79,8 +79,6 @@ export default function RoomTable({
                   <p className="font-semibold text-slate-900">
                     {room.roomNumber}
                   </p>
-
-                  <p className="text-sm text-slate-500">Room #{room.id}</p>
                 </div>
               </TableCell>
 

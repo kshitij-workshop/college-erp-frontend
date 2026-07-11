@@ -60,6 +60,16 @@ const ROOM_TYPE_OPTIONS = [
   },
 ];
 
+const DAY_OF_WEEK_OPTIONS = [
+  { value: "MONDAY", label: "Monday" },
+  { value: "TUESDAY", label: "Tuesday" },
+  { value: "WEDNESDAY", label: "Wednesday" },
+  { value: "THURSDAY", label: "Thursday" },
+  { value: "FRIDAY", label: "Friday" },
+  { value: "SATURDAY", label: "Saturday" },
+  { value: "SUNDAY", label: "Sunday" },
+];
+
 export {
   GENDER_OPTIONS,
   BLOOD_GROUP_OPTIONS,
@@ -67,4 +77,5 @@ export {
   SUBJECT_TYPE_OPTIONS,
   SEMESTER_OPTIONS,
   ROOM_TYPE_OPTIONS,
+  DAY_OF_WEEK_OPTIONS
 };

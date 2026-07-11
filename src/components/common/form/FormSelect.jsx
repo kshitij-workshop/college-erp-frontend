@@ -7,7 +7,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { string } from "zod";
 
 export default function FormSelect({
   control,
@@ -18,6 +17,7 @@ export default function FormSelect({
   onValueChange,
   getOptionLabel = (item) => item.name ?? item.label,
   getOptionValue = (item) => item.id ?? item.value,
+  renderOption,
   isNumber = true,
 }) {
   return (
@@ -29,7 +29,13 @@ export default function FormSelect({
           <label className="text-sm font-medium">{label}</label>
 
           <Select
-            value={field.value ? String(field.value) : ""}
+            value={
+              field.value !== undefined &&
+              field.value !== null &&
+              field.value !== ""
+                ? String(field.value)
+                : ""
+            }
             onValueChange={(value) => {
               const parsedValue = isNumber ? Number(value) : value;
 
@@ -45,10 +51,10 @@ export default function FormSelect({
             <SelectContent>
               {options.map((item) => (
                 <SelectItem
-                  key={string(getOptionValue(item))}
+                  key={String(getOptionValue(item))}
                   value={String(getOptionValue(item))}
                 >
-                  {getOptionLabel(item)}
+                  {renderOption ? renderOption(item) : getOptionLabel(item)}
                 </SelectItem>
               ))}
             </SelectContent>

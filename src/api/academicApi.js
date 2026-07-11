@@ -25,3 +25,8 @@ export function getAllPrograms() {
 export function getAllSections() {
     return api.get("/sections");
 }
+
+export function getAllBatches() {
+    return api.get("/batches");
+}
+
