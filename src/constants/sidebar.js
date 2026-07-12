@@ -29,6 +29,11 @@ export const sidebarItems = [
     href: "/dashboard/faculty",
   },
   {
+    title: "Attendance",
+    icon: CalendarRange,
+    href: "/dashboard/attendance",
+  },
+  {
     title: "Departments",
     icon: Building2,
     href: "/dashboard/departments",

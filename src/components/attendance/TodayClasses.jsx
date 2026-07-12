@@ -2,6 +2,8 @@ import { BookOpen, Clock, MapPin, Users } from "lucide-react";
 
 import { Card } from "@/components/ui/card";
 
+import { Badge } from "@/components/ui/badge";
+
 export default function TodayClasses({
   classes = [],
   selectedClass,
@@ -49,20 +51,34 @@ export default function TodayClasses({
             <div className="space-y-4">
               {/* Subject */}
 
-              <div>
-                <h3 className="flex items-center gap-2 font-semibold">
-                  <BookOpen className="h-5 w-5 text-blue-600" />
+              <div className="space-y-2">
+                <div className="flex items-start justify-between gap-3">
+                  <h3 className="flex items-center gap-2 font-semibold">
+                    <BookOpen className="h-5 w-5 text-blue-600 shrink-0" />
+                    <span>{classItem.subjectName}</span>
+                  </h3>
 
-                  {classItem.subjectName}
-                </h3>
-                {active && (
-                  <span className="inline-flex rounded-full bg-blue-600 px-2 py-1 text-xs font-medium text-white">
-                    Selected
-                  </span>
-                )}
+                  <div className="flex items-center gap-2">
+                    {classItem.attendanceMarked ? (
+                      <Badge className="bg-green-100 text-green-700">
+                        Submitted
+                      </Badge>
+                    ) : (
+                      <Badge className="bg-yellow-100 text-yellow-700">
+                        Pending
+                      </Badge>
+                    )}
 
-                <p className="mt-1 text-sm text-slate-500">
-                  {classItem.subjectCode}
+                    {active && (
+                      <Badge className="bg-blue-100 text-blue-700">
+                        Selected
+                      </Badge>
+                    )}
+                  </div>
+                </div>
+
+                <p className="text-sm text-slate-500">
+                  {classItem.subjectCode} - {classItem.facultyName}
                 </p>
               </div>
 

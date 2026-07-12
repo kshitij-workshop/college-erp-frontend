@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import {
-  getMyClasses,
+  getClasses,
   getStudentsForClass,
   markAttendance,
+  getAttendanceSheet,
+  updateAttendance as updateAttendanceApi,
 } from "@/api/attendanceApi";
 
 export function useAttendance() {
@@ -25,11 +27,16 @@ export function useAttendance() {
 
   const [saving, setSaving] = useState(false);
 
+  const [attendanceMarked, setAttendanceMarked] = useState(false);
+
+
+  const [sessionId, setSessionId] = useState(null);
+
   async function loadClasses(date) {
     try {
       setLoadingClasses(true);
 
-      const response = await getMyClasses(date);
+      const response = await getClasses(date);
 
       setClasses(response.data.data);
 
@@ -47,25 +54,33 @@ export function useAttendance() {
     }
   }
 
-  async function loadStudents(timetableEntryId) {
+  async function loadAttendanceSheet(timetableEntryId) {
     try {
       setLoadingStudents(true);
 
-      const response = await getStudentsForClass(timetableEntryId);
+      const response = await getAttendanceSheet(timetableEntryId, selectedDate);
 
-      setStudents(response.data.data);
+      const data = response.data.data;
 
-      const initialAttendance = {};
+      setAttendanceMarked(data.attendanceMarked);
 
-      response.data.data.forEach((student) => {
-        initialAttendance[student.studentId] = "PRESENT";
+      setSessionId(data.sessionId);
+
+      setStudents(data.students);
+
+      const attendanceMap = {};
+
+      data.students.forEach((student) => {
+        attendanceMap[student.studentId] = student.status;
       });
 
-      setAttendance(initialAttendance);
+      setAttendance(attendanceMap);
     } catch (error) {
       console.error(error);
 
-      toast.error("Failed to load students.");
+      toast.error(
+        error.response?.data?.message || "Failed to load attendance.",
+      );
     } finally {
       setLoadingStudents(false);
     }
@@ -74,7 +89,7 @@ export function useAttendance() {
   function selectClass(classItem) {
     setSelectedClass(classItem);
 
-    loadStudents(classItem.timetableEntryId);
+    loadAttendanceSheet(classItem.timetableEntryId);
   }
 
   function updateAttendance(studentId, status) {
@@ -85,14 +100,14 @@ export function useAttendance() {
   }
 
   function markAllPresent() {
-  const updatedAttendance = {};
+    const updatedAttendance = {};
 
-  students.forEach((student) => {
-    updatedAttendance[student.studentId] = "PRESENT";
-  });
+    students.forEach((student) => {
+      updatedAttendance[student.studentId] = "PRESENT";
+    });
 
-  setAttendance(updatedAttendance);
-}
+    setAttendance(updatedAttendance);
+  }
 
   const summary = {
     total: students.length,
@@ -111,6 +126,7 @@ export function useAttendance() {
   };
 
   async function saveAttendance() {
+  
     if (!selectedClass) {
       toast.error("Please select a class.");
 
@@ -125,17 +141,25 @@ export function useAttendance() {
         status: attendance[student.studentId],
       }));
 
-      await markAttendance({
-        timetableEntryId: selectedClass.timetableEntryId,
-        sessionDate: selectedDate,
-        entries,
-      });
+    
+      if (attendanceMarked) {
+        await updateAttendanceApi(sessionId, {
+          entries,
+        });
 
-      toast.success("Attendance marked successfully.");
+        toast.success("Attendance updated successfully.");
+      } else {
+        await markAttendance({
+          timetableEntryId: selectedClass.timetableEntryId,
+          sessionDate: selectedDate,
+          entries,
+        });
 
-      setSelectedClass(null);
-      setStudents([]);
-      setAttendance({});
+        toast.success("Attendance submitted successfully.");
+      }
+      await loadAttendanceSheet(selectedClass.timetableEntryId);
+      await loadClasses(selectedDate);
+
     } catch (error) {
       console.error(error);
 
@@ -170,13 +194,15 @@ export function useAttendance() {
     saving,
 
     loadClasses,
-    loadStudents,
+    attendanceMarked,
 
     selectClass,
 
     updateAttendance,
+    loadAttendanceSheet,
 
     saveAttendance,
     markAllPresent,
+    
   };
 }

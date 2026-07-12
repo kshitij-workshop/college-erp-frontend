@@ -1,20 +1,24 @@
 import api from "./axios";
 
-// ==========================================
-// Faculty Classes
-// ==========================================
+export function getAttendanceSheet(timetableEntryId, date) {
+  return api.get(`/attendance/classes/${timetableEntryId}/sheet`, {
+    params: { date },
+  });
+}
 
-export function getMyClasses(date) {
-  return api.get("/attendance/faculty/me/classes", {
+export function updateAttendance(sessionId, data) {
+  return api.put(`/attendance/session/${sessionId}`, data);
+}
+
+export function getClasses(date) {
+  return api.get("/attendance/classes", {
     params: {
       date,
     },
   });
 }
 
-// ==========================================
-// Students for Selected Class
-// ==========================================
+
 
 export function getStudentsForClass(timetableEntryId) {
   return api.get(
@@ -52,4 +56,8 @@ export function getAttendanceSessionsByOffering(subjectOfferingId) {
 
 export function getAttendancePercentage(studentId) {
   return api.get(`/attendance/student/${studentId}/percentage`);
+}
+
+export function getAttendanceHistory() {
+  return api.get("/attendance/history");
 }

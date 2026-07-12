@@ -22,6 +22,8 @@ import SubjectOfferingPage from "@/pages/subject-offerings/SubjectOfferingPage";
 import TimeSlotsPage from "@/pages/time-slots/TimeSlotsPage";
 import TimetablePage from "@/pages/timetable/TimetablePage";
 import AttendancePage from "@/pages/attendance/AttendancePage";
+import AttendanceHistoryPage from "@/pages/attendance/AttendanceHistoryPage";
+import AttendanceSessionPage from "@/pages/attendance/AttendanceSessionPage";
 
 
 export default function AppRoutes() {
@@ -68,13 +70,9 @@ export default function AppRoutes() {
         <Route path="time-slots" element={<TimeSlotsPage />} />
         <Route path="timetable" element={<TimetablePage />} />
         <Route path="attendance" element={<AttendancePage />} />
-
-
-
-
-
-
-
+        <Route path="attendance/history" element={<AttendanceHistoryPage />} />
+        <Route path="attendance/history/:sessionId" element={<AttendanceSessionPage />} />
+      
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />
