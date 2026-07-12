@@ -134,9 +134,6 @@ export default function TimetableTable({
                 <div className="space-y-1">
                   <p className="font-medium">{entry.roomNumber}</p>
 
-                  <Badge variant="outline" className="text-xs">
-                    {entry.roomType}
-                  </Badge>
                 </div>
               </TableCell>
 

@@ -22,7 +22,7 @@ export default function TimetableForm({
   submitLabel = "Save Timetable",
 }) {
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 p-8">
+    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 p-6">
       {/* ================= Academic Information ================= */}
 
       <Card>
@@ -33,7 +33,7 @@ export default function TimetableForm({
           </CardTitle>
         </CardHeader>
 
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-5 pt-5">
           <FormSelect
             control={form.control}
             name="subjectOfferingId"
@@ -65,7 +65,7 @@ export default function TimetableForm({
         </CardHeader>
 
         <CardContent className="space-y-6">
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
             <FormSelect
               control={form.control}
               name="dayOfWeek"

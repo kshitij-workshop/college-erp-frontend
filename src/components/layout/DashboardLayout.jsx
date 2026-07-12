@@ -1,22 +1,27 @@
+import {
+  SidebarProvider,
+  SidebarInset,
+} from "@/components/ui/sidebar";
+
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 
 export default function DashboardLayout({ children }) {
   return (
-    <div className="flex min-h-screen bg-slate-50">
-
+    <SidebarProvider defaultOpen={true}>
       <Sidebar />
 
-      <div className="flex flex-1 flex-col">
+      <SidebarInset>
+        <div className="flex min-h-screen flex-col bg-slate-50">
 
-        <Navbar />
+          <Navbar />
 
-        <main className="flex-1 overflow-y-auto p-8">
-          {children}
-        </main>
+          <main className="flex-1 overflow-y-auto p-8">
+            {children}
+          </main>
 
-      </div>
-
-    </div>
+        </div>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }

@@ -127,8 +127,8 @@ export default function StudentViewSheet({ open, onOpenChange, studentId }) {
 
                 <DetailField
                   className="md:col-span-2"
-                  label="Enrollment Number"
-                  value={student.enrollmentNumber}
+                  label="Registration Number"
+                  value={student.registrationNumber}
                 />
 
                 <DetailField

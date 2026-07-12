@@ -34,9 +34,9 @@ export default function TimetableDialog({
       open={open}
       onOpenChange={onOpenChange}
     >
-      <DialogContent className="sm:max-w-3xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>
+      <DialogContent className="sm:max-w-4xl p-0 max-h-[90vh] overflow-y-auto">
+        <DialogHeader className="border-b px-8 py-6">
+          <DialogTitle className="text-3xl font-bold">
             {timetable
               ? "Edit Timetable"
               : "Create Timetable"}

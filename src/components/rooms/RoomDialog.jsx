@@ -28,8 +28,8 @@ export default function RoomDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-xl">
-        <DialogHeader>
-          <DialogTitle>
+        <DialogHeader className="border-b px-8 py-6">
+          <DialogTitle className="text-3xl font-bold">
             {room ? "Edit Room" : "Add Room"}
           </DialogTitle>
         </DialogHeader>

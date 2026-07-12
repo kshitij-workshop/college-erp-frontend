@@ -7,14 +7,19 @@ import App from "./App";
 import "./index.css";
 
 import AuthProvider from "@/context/AuthContext";
+import { TooltipProvider } from "./components/ui/tooltip";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <BrowserRouter>
+    <TooltipProvider>
+      <BrowserRouter>
       <AuthProvider>
         <App />
         <Toaster richColors position="top-right" />
       </AuthProvider>
     </BrowserRouter>
+
+    </TooltipProvider>
+    
   </StrictMode>
 );

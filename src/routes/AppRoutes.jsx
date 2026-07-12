@@ -21,6 +21,8 @@ import RoomsPage from "@/pages/rooms/RoomsPage";
 import SubjectOfferingPage from "@/pages/subject-offerings/SubjectOfferingPage";
 import TimeSlotsPage from "@/pages/time-slots/TimeSlotsPage";
 import TimetablePage from "@/pages/timetable/TimetablePage";
+import AttendancePage from "@/pages/attendance/AttendancePage";
+
 
 export default function AppRoutes() {
   const { user, loading } = useAuth();
@@ -65,6 +67,7 @@ export default function AppRoutes() {
         <Route path="rooms" element={<RoomsPage />} />
         <Route path="time-slots" element={<TimeSlotsPage />} />
         <Route path="timetable" element={<TimetablePage />} />
+        <Route path="attendance" element={<AttendancePage />} />
 
 
 

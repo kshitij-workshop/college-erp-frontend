@@ -33,8 +33,10 @@ export default function SubjectDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl">
-        <DialogHeader>
-          <DialogTitle>{subject ? "Edit Subject" : "Add Subject"}</DialogTitle>
+        <DialogHeader className="border-b px-8 py-6">
+          <DialogTitle className="text-3xl font-bold">
+            {subject ? "Edit Subject" : "Add Subject"}
+          </DialogTitle>
         </DialogHeader>
 
         <SubjectForm

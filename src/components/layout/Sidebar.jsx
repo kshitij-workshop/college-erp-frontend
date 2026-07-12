@@ -1,47 +1,62 @@
 import {
-  ChevronLeft,
-} from "lucide-react";
+  Sidebar as AppSidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarRail,
+  useSidebar,
+} from "@/components/ui/sidebar";
 
-import { sidebarItems } from "@/constants/sidebar";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import Logo from "./Logo";
 import SidebarItem from "./SidebarItem";
-
+import { sidebarItems } from "@/constants/sidebar";
 
 export default function Sidebar() {
+  const { state, toggleSidebar } = useSidebar();
+
   return (
-    <aside className="flex h-screen w-72 flex-col border-r bg-white">
+    <AppSidebar collapsible="icon">
 
-      <div className="border-b py-4">
+      <SidebarHeader className="border-b py-4">
         <Logo />
-      </div>
+      </SidebarHeader>
 
-      <nav className="flex-1 space-y-2 px-4 py-6">
+      <SidebarContent>
+        <SidebarMenu className="px-2 py-4">
+          {sidebarItems.map((item) => (
+            <SidebarItem
+              key={item.title}
+              icon={item.icon}
+              label={item.title}
+              to={item.href}
+            />
+          ))}
+        </SidebarMenu>
+      </SidebarContent>
 
-        {sidebarItems.map((item) => (
-          <SidebarItem
-            key={item.title}
-            icon={item.icon}
-            label={item.title}
-            to={item.href}
-          />
-        ))}
+      <SidebarFooter className="border-t p-2">
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton onClick={toggleSidebar}>
+              {state === "expanded" ? (
+                <ChevronLeft className="h-4 w-4" />
+              ) : (
+                <ChevronRight className="h-4 w-4" />
+              )}
 
-      </nav>
+              <span>Collapse</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
 
-      <div className="border-t p-4">
+      <SidebarRail />
 
-        <button
-          className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-slate-500 transition hover:bg-slate-100"
-        >
-          <ChevronLeft className="h-5 w-5" />
-
-          Collapse
-
-        </button>
-
-      </div>
-
-    </aside>
+    </AppSidebar>
   );
 }
