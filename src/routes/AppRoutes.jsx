@@ -26,7 +26,7 @@ import AttendanceHistoryPage from "@/pages/attendance/AttendanceHistoryPage";
 import AttendanceSessionPage from "@/pages/attendance/AttendanceSessionPage";
 import ExamPage from "@/pages/exams/ExamPage";
 import AssignmentsPage from "@/pages/assignments/AssignmentsPage";
-
+import NoticesPage from "@/pages/notices/NoticesPage";
 
 export default function AppRoutes() {
   const { user, loading } = useAuth();
@@ -67,16 +67,19 @@ export default function AppRoutes() {
         <Route path="semesters" element={<SemesterPage />} />
         <Route path="sections" element={<SectionPage />} />
         <Route path="subjects" element={<SubjectsPage />} />
-        <Route path="subject-offerings" element={<SubjectOfferingPage />} /> 
+        <Route path="subject-offerings" element={<SubjectOfferingPage />} />
         <Route path="rooms" element={<RoomsPage />} />
         <Route path="time-slots" element={<TimeSlotsPage />} />
         <Route path="timetable" element={<TimetablePage />} />
         <Route path="attendance" element={<AttendancePage />} />
         <Route path="attendance/history" element={<AttendanceHistoryPage />} />
-        <Route path="attendance/history/:sessionId" element={<AttendanceSessionPage />} />
+        <Route
+          path="attendance/history/:sessionId"
+          element={<AttendanceSessionPage />}
+        />
         <Route path="exams" element={<ExamPage />} />
         <Route path="assignments" element={<AssignmentsPage />} />
-      
+        <Route path="notices" element={<NoticesPage />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />
