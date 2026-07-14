@@ -25,6 +25,7 @@ import AttendancePage from "@/pages/attendance/AttendancePage";
 import AttendanceHistoryPage from "@/pages/attendance/AttendanceHistoryPage";
 import AttendanceSessionPage from "@/pages/attendance/AttendanceSessionPage";
 import ExamPage from "@/pages/exams/ExamPage";
+import AssignmentsPage from "@/pages/assignments/AssignmentsPage";
 
 
 export default function AppRoutes() {
@@ -74,6 +75,7 @@ export default function AppRoutes() {
         <Route path="attendance/history" element={<AttendanceHistoryPage />} />
         <Route path="attendance/history/:sessionId" element={<AttendanceSessionPage />} />
         <Route path="exams" element={<ExamPage />} />
+        <Route path="assignments" element={<AssignmentsPage />} />
       
       </Route>
 
