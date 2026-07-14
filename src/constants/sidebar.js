@@ -10,6 +10,7 @@ import {
   LayoutGrid,
   UserCog,
   BookPlus
+  ,ClipboardList
 } from "lucide-react";
 
 export const sidebarItems = [
@@ -32,6 +33,11 @@ export const sidebarItems = [
     title: "Attendance",
     icon: CalendarRange,
     href: "/dashboard/attendance",
+  },
+  {
+    title: "Exams",
+    icon: ClipboardList,
+    href: "/dashboard/exams",
   },
   {
     title: "Departments",

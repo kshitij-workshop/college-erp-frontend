@@ -8,6 +8,10 @@ export function getSubjectOfferings() {
   return api.get("/subject-offerings");
 }
 
+export function getMySubjectOfferings() {
+  return api.get("/subject-offerings/my");
+}
+
 export function getSubjectOfferingById(id) {
   return api.get(`/subject-offerings/${id}`);
 }
@@ -19,4 +23,3 @@ export function updateSubjectOffering(id, data) {
 export function deleteSubjectOffering(id) {
   return api.delete(`/subject-offerings/${id}`);
 }
-
