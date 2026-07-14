@@ -6,6 +6,7 @@ import Login from "@/pages/auth/Login";
 
 import DashboardLayoutPage from "@/pages/dashboard/DashboardLayoutPage";
 import DashboardHome from "@/pages/dashboard/DashboardHome";
+import FacultyDashboard from "@/pages/dashboard/FacultyDashboard";
 
 import StudentsPage from "@/pages/students/StudentsPage";
 
@@ -56,7 +57,12 @@ export default function AppRoutes() {
           </ProtectedRoute>
         }
       >
-        <Route index element={<DashboardHome />} />
+        <Route
+          index
+          element={user?.role === "FACULTY" ? <FacultyDashboard /> : <DashboardHome />}
+        />
+
+        <Route path="faculty-dashboard" element={<FacultyDashboard />} />
 
         <Route path="students" element={<StudentsPage />} />
 
