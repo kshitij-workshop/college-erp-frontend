@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { getStudents } from "@/api/studentApi";
 import { getDepartments } from "@/api/academicApi";
 import { getAllSemesters } from "@/api/academicApi";
+import { getPrograms } from "@/api/academicApi";
+import { getBatches } from "@/api/academicApi";
 
 export function useStudents() {
 
@@ -38,6 +40,8 @@ export function useStudents() {
 
   const [departments, setDepartments] = useState([]);
   const [semesters, setSemesters] = useState([]);
+  const [programs, setPrograms] = useState([]);
+  const [batches, setBatches] = useState([]);
 
   // ===============================
   // Filter Change
@@ -53,6 +57,41 @@ export function useStudents() {
     setPage(0);
 
   };
+
+  
+  // ===============================
+  // Load Programs
+  // ===============================
+
+  async function loadPrograms(departmentId) {
+
+    try {
+
+      const response = await getPrograms(departmentId);
+
+      setPrograms(response.data.data);
+
+    } catch (error) {
+
+      console.error(error);
+
+    }
+
+  }
+
+  useEffect(() => {
+
+    if (filters.departmentId) {
+
+      loadPrograms(filters.departmentId);
+
+    } else {
+
+      setPrograms([]);
+
+    }
+
+  }, [filters.departmentId]);
 
   // ===============================
   // Load Departments
@@ -82,6 +121,36 @@ export function useStudents() {
 
   loadSemesters();
 }, []);
+
+async function loadBatches(programId) {
+
+    try {
+
+      const response = await getBatches(programId);
+
+      setBatches(response.data.data);
+
+    } catch (error) {
+
+      console.error(error);
+
+    }
+
+  }
+
+  useEffect(() => {
+
+    if (filters.programId) {
+
+      loadBatches(filters.programId);
+
+    } else {
+
+      setBatches([]);
+
+    }
+
+  }, [filters.programId]);
 
   // ===============================
   // Fetch Students
@@ -181,6 +250,8 @@ export function useStudents() {
 
     departments,
     semesters,
+    programs,
+    batches, 
 
     refresh,
 

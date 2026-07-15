@@ -68,7 +68,7 @@ export default function TimetableViewSheet({
       open={open}
       onOpenChange={onOpenChange}
     >
-      <SheetContent className="w-full sm:max-w-xl p-0 bg-slate-50">
+      <SheetContent className="w-full sm:max-w-2xl p-0 bg-slate-50">
 
         {loading ? (
           <div className="space-y-6 p-8">

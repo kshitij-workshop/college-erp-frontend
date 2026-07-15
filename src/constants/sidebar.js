@@ -94,20 +94,20 @@ export const sidebarItems = [
     icon: CalendarRange,
     href: "/dashboard/time-slots",
   },
-  {
-    title: "Library",
-    icon: Library,
-    href: "/dashboard/library",
-  },
+  // {
+  //   title: "Library",
+  //   icon: Library,
+  //   href: "/dashboard/library",
+  // },
   {
     title: "Time Table",
     icon: BookOpen,
     href: "/dashboard/timetable",
   },
-  {
-    title: "Settings",
-    icon: Settings,
-    href: "/dashboard/settings",
-  },
+  // {
+  //   title: "Settings",
+  //   icon: Settings,
+  //   href: "/dashboard/settings",
+  // },
   
 ];

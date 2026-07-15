@@ -3,10 +3,11 @@ import { useNavigate } from "react-router-dom";
 
 import { useAuth } from "@/hooks/useAuth";
 import { useAssignments } from "@/hooks/useAssignments";
-import { useExams } from "@/hooks/useExams";
-import { getMySubjectOfferings } from "@/api/subjectOfferingApi";
-import { getClasses } from "@/api/attendanceApi";
 import { useDashboard } from "@/hooks/useDashboard";
+import { getClasses } from "@/api/attendanceApi";
+import { getStudentResults } from "@/api/examApi";
+import { getMySubjectOfferings } from "@/api/subjectOfferingApi";
+import { getNotices } from "@/api/noticeApi";
 
 import StatCard from "@/components/dashboard/StatCard";
 import { Button } from "@/components/ui/button";
@@ -16,13 +17,14 @@ import {
   Bell,
   BookOpen,
   CalendarClock,
-  ClipboardCheck,
   ClipboardList,
   Mail,
   MapPin,
   Users,
   Clock3,
-  Building2,
+  Award,
+  CheckCircle2,
+  AlertCircle,
 } from "lucide-react";
 
 function getGreeting() {
@@ -95,39 +97,30 @@ function SectionCard({ title, description, icon: Icon, children }) {
   );
 }
 
-export default function FacultyDashboard() {
+export default function StudentDashboard() {
   const navigate = useNavigate();
   const { user } = useAuth();
-    const { dashboard:facultyDashboard, loading: dashboardLoading } =
-      useDashboard();
+  const { dashboard: studentDashboard, loading: dashboardLoading } =
+    useDashboard();
   const { assignments, loading: assignmentsLoading } = useAssignments();
-  const { exams, loading: examsLoading } = useExams();
 
-  const [subjectOfferings, setSubjectOfferings] = useState([]);
   const [todayClasses, setTodayClasses] = useState([]);
-  const [offeringsLoading, setOfferingsLoading] = useState(true);
-  const [classesLoading, setClassesLoading] = useState(true);
+  const [studentResults, setStudentResults] = useState([]);
+  const [notices, setNotices] = useState([]);
+  const [subjectOfferings, setSubjectOfferings] = useState([]);
 
-  const displayName = user?.fullName || user?.name || "Faculty";
+  const [classesLoading, setClassesLoading] = useState(true);
+  const [resultsLoading, setResultsLoading] = useState(true);
+  const [noticesLoading, setNoticesLoading] = useState(true);
+  const [offeringsLoading, setOfferingsLoading] = useState(true);
+
+  const displayName =
+    studentDashboard?.studentName || user?.fullName || user?.name || "Student";
   const email = user?.email || "—";
   const today = new Date().toISOString().split("T")[0];
 
   useEffect(() => {
     let active = true;
-
-    async function loadMySubjectOfferings() {
-      try {
-        setOfferingsLoading(true);
-        const response = await getMySubjectOfferings();
-        if (!active) return;
-        setSubjectOfferings(response.data.data ?? []);
-      } catch (error) {
-        console.error(error);
-        if (active) setSubjectOfferings([]);
-      } finally {
-        if (active) setOfferingsLoading(false);
-      }
-    }
 
     async function loadTodayClasses() {
       try {
@@ -143,22 +136,73 @@ export default function FacultyDashboard() {
       }
     }
 
-    loadMySubjectOfferings();
+    async function loadStudentResults() {
+      if (!user?.id) return;
+      try {
+        setResultsLoading(true);
+        const response = await getStudentResults(user.id, true);
+        if (!active) return;
+        setStudentResults(response.data.data ?? []);
+      } catch (error) {
+        console.error(error);
+        if (active) setStudentResults([]);
+      } finally {
+        if (active) setResultsLoading(false);
+      }
+    }
+
+    async function loadNotices() {
+      try {
+        setNoticesLoading(true);
+        const response = await getNotices();
+        if (!active) return;
+        setNotices((response.data.data ?? []).slice(0, 5));
+      } catch (error) {
+        console.error(error);
+        if (active) setNotices([]);
+      } finally {
+        if (active) setNoticesLoading(false);
+      }
+    }
+
+    async function loadMySubjectOfferings() {
+      try {
+        setOfferingsLoading(true);
+        const response = await getMySubjectOfferings();
+        if (!active) return;
+        setSubjectOfferings(response.data.data ?? []);
+      } catch (error) {
+        console.error(error);
+        if (active) setSubjectOfferings([]);
+      } finally {
+        if (active) setOfferingsLoading(false);
+      }
+    }
     loadTodayClasses();
+    loadTodayClasses();
+    loadStudentResults();
+    loadNotices();
+    loadMySubjectOfferings();
 
     return () => {
       active = false;
     };
-  }, [today, user?.email, user?.fullName, user?.name]);
+  }, [today, user?.id]);
 
   const loading =
-    assignmentsLoading || examsLoading || offeringsLoading || classesLoading;
+    dashboardLoading ||
+    classesLoading ||
+    resultsLoading ||
+    noticesLoading ||
+    offeringsLoading ||
+    assignmentsLoading;
 
   const hasContent =
-    subjectOfferings.length > 0 ||
+    Boolean(studentDashboard) ||
     todayClasses.length > 0 ||
     assignments.length > 0 ||
-    exams.length > 0;
+    studentResults.length > 0 ||
+    notices.length > 0;
 
   if (loading && !hasContent) {
     return (
@@ -186,6 +230,18 @@ export default function FacultyDashboard() {
     );
   }
 
+  const overallAttendancePercentage =
+    studentDashboard?.overallAttendancePercentage ?? 0;
+  const totalAssignmentsSubmitted =
+    studentDashboard?.totalAssignmentsSubmitted ?? 0;
+  const totalExamsAppeared = studentDashboard?.totalExamsAppeared ?? 0;
+  const booksCurrentlyIssued = studentDashboard?.booksCurrentlyIssued ?? 0;
+  const pendingFeeAmount = studentDashboard?.pendingFeeAmount ?? 0;
+  const formattedPendingFee = new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+  }).format(pendingFeeAmount);
+
   return (
     <div className="space-y-6">
       <div className="space-y-2">
@@ -194,14 +250,14 @@ export default function FacultyDashboard() {
         </h1>
 
         <p className="max-w-2xl text-sm text-slate-600 sm:text-base">
-          Keep track of today&apos;s classes, assigned subjects, assignments,
-          and exams from one place.
+          Keep track of your classes, assignments, exams, attendance, and grades
+          from one place.
         </p>
         <br />
 
         <div className="flex flex-wrap gap-3 pt-2">
-          <Button onClick={() => navigate("/dashboard/attendance")}>
-            Mark attendance
+          <Button onClick={() => navigate("/dashboard/timetable")}>
+            My Timetable
           </Button>
           <Button
             variant="outline"
@@ -221,37 +277,64 @@ export default function FacultyDashboard() {
 
         <div className="grid gap-3 pt-2 sm:grid-cols-2 xl:grid-cols-4">
           <StatRow icon={Mail} label="Email" value={email} />
-          <StatRow icon={Bell} label="Role" value={user?.role || "FACULTY"} />
-          <StatRow icon={Building2} label="Department" value={facultyDashboard?.departmentName || "FACULTY"} />
-          <StatRow icon={Bell} label="EMP-CODE" value={facultyDashboard?.employeeCode || "FACULTY"} />
-
-
+          <StatRow
+            icon={ClipboardList}
+            label="Roll Number"
+            value={studentDashboard?.rollNumber || "—"}
+          />
+          <StatRow
+            icon={Award}
+            label="Registration Number"
+            value={studentDashboard?.registrationNumber || "—"}
+          />
+          <StatRow
+            icon={BookOpen}
+            label="Program"
+            value={studentDashboard?.programName || "—"}
+          />
+          <StatRow
+            icon={Users}
+            label="Section"
+            value={studentDashboard?.sectionName || "—"}
+          />
+          <StatRow
+            icon={CalendarClock}
+            label="Semester"
+            value={studentDashboard?.semesterNumber || "—"}
+          />
+          <StatRow icon={Bell} label="Role" value={user?.role || "STUDENT"} />
         </div>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
         <StatCard
-          title="Subject Offerings"
-          value={subjectOfferings.length}
-          icon={BookOpen}
-          color="blue"
-        />
-        <StatCard
-          title="Today's Classes"
-          value={todayClasses.length}
-          icon={Clock3}
+          title="Overall Attendance"
+          value={`${overallAttendancePercentage}%`}
+          icon={CheckCircle2}
           color="green"
         />
         <StatCard
-          title="Assignments"
-          value={assignments.length}
+          title="Assignments Submitted"
+          value={totalAssignmentsSubmitted}
           icon={ClipboardList}
           color="orange"
         />
         <StatCard
-          title="Exams"
-          value={exams.length}
+          title="Exams Appeared"
+          value={totalExamsAppeared}
           icon={CalendarClock}
+          color="blue"
+        />
+        <StatCard
+          title="Books Issued"
+          value={booksCurrentlyIssued}
+          icon={BookOpen}
+          color="purple"
+        />
+        <StatCard
+          title="Pending Fee"
+          value={formattedPendingFee}
+          icon={AlertCircle}
           color="purple"
         />
       </div>
@@ -259,8 +342,8 @@ export default function FacultyDashboard() {
       <br />
       <div className="grid gap-6 lg:grid-cols-3">
         <SectionCard
-          title="Today's classes"
-          description="Classes scheduled for the selected date."
+          title="Today's Classes"
+          description="Classes scheduled for today."
           icon={Clock3}
         >
           <div className="space-y-3">
@@ -278,7 +361,7 @@ export default function FacultyDashboard() {
                         </p>
                         {classItem.attendanceMarked ? (
                           <span className="rounded-full bg-green-100 px-2.5 py-1 text-xs font-semibold text-green-700">
-                            Submitted
+                            Attended
                           </span>
                         ) : (
                           <span className="rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-700">
@@ -309,15 +392,15 @@ export default function FacultyDashboard() {
               ))
             ) : (
               <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-6 text-sm text-slate-500">
-                No classes scheduled for this date.
+                No classes scheduled for today.
               </div>
             )}
           </div>
         </SectionCard>
 
         <SectionCard
-          title="Assigned subjects"
-          description="Subject offerings currently assigned to you."
+          title="My Courses"
+          description="Subject offerings you are enrolled in."
           icon={BookOpen}
         >
           <div className="space-y-3">
@@ -341,33 +424,31 @@ export default function FacultyDashboard() {
               ))
             ) : (
               <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-6 text-sm text-slate-500">
-                No assigned subjects are available yet.
+                No enrolled courses are available.
               </div>
             )}
           </div>
         </SectionCard>
 
         <SectionCard
-          title="Quick actions"
-          description="Jump straight to common faculty tasks."
+          title="Quick Actions"
+          description="Jump to common tasks."
           icon={ArrowRight}
         >
           <div className="space-y-3">
             <Button
               variant="outline"
               className="h-auto w-full justify-start rounded-2xl border-slate-200 p-4 text-left hover:border-blue-300 hover:bg-blue-50"
-              onClick={() => navigate("/dashboard/attendance")}
+              onClick={() => navigate("/dashboard/timetable")}
             >
               <div className="flex items-start gap-3">
                 <div className="rounded-xl bg-blue-100 p-2 text-blue-700">
-                  <ClipboardCheck className="h-4 w-4" />
+                  <Clock3 className="h-4 w-4" />
                 </div>
                 <div>
-                  <p className="font-semibold text-slate-900">
-                    Mark attendance
-                  </p>
+                  <p className="font-semibold text-slate-900">View Timetable</p>
                   <p className="mt-1 text-sm font-normal text-slate-500">
-                    Open today&apos;s class attendance.
+                    Check your class schedule.
                   </p>
                 </div>
               </div>
@@ -384,10 +465,10 @@ export default function FacultyDashboard() {
                 </div>
                 <div>
                   <p className="font-semibold text-slate-900">
-                    Review assignments
+                    View Assignments
                   </p>
                   <p className="mt-1 text-sm font-normal text-slate-500">
-                    See active assignment work.
+                    Check pending assignments.
                   </p>
                 </div>
               </div>
@@ -403,9 +484,9 @@ export default function FacultyDashboard() {
                   <CalendarClock className="h-4 w-4" />
                 </div>
                 <div>
-                  <p className="font-semibold text-slate-900">Check exams</p>
+                  <p className="font-semibold text-slate-900">View Exams</p>
                   <p className="mt-1 text-sm font-normal text-slate-500">
-                    Review exam schedules and status.
+                    Check exam schedules.
                   </p>
                 </div>
               </div>
@@ -416,83 +497,121 @@ export default function FacultyDashboard() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         <SectionCard
-          title="Assignments"
-          description="Recent assignments across your subject offerings."
+          title="Pending Assignments"
+          description="Assignments due soon."
           icon={ClipboardList}
         >
           <div className="space-y-3">
             {assignments.length ? (
-              assignments.slice(0, 4).map((assignment) => (
-                <div
-                  key={assignment.id}
-                  className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <p className="font-semibold text-slate-900">
-                        {assignment.title}
-                      </p>
-                      <p className="mt-1 text-sm text-slate-600">
-                        {assignment.subjectName} • {assignment.sectionName}
+              assignments
+                .filter((a) => new Date(a.dueDate) > new Date())
+                .slice(0, 4)
+                .map((assignment) => (
+                  <div
+                    key={assignment.id}
+                    className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <p className="font-semibold text-slate-900">
+                          {assignment.title}
+                        </p>
+                        <p className="mt-1 text-sm text-slate-600">
+                          {assignment.subjectName} • {assignment.sectionName}
+                        </p>
+                      </div>
+                      <p className="text-xs font-medium text-slate-500">
+                        {formatDateTime(assignment.dueDate)}
                       </p>
                     </div>
-                    <p className="text-xs font-medium text-slate-500">
-                      {formatDateTime(assignment.dueDate)}
-                    </p>
                   </div>
-                </div>
-              ))
+                ))
             ) : (
               <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-6 text-sm text-slate-500">
-                No assignments found.
+                No pending assignments.
               </div>
             )}
           </div>
         </SectionCard>
 
         <SectionCard
-          title="Exams"
-          description="Recent exams tied to your offerings."
-          icon={CalendarClock}
+          title="Exam Results"
+          description="Published exam results."
+          icon={Award}
         >
           <div className="space-y-3">
-            {exams.length ? (
-              exams.slice(0, 4).map((exam) => (
+            {studentResults.length ? (
+              studentResults.slice(0, 4).map((result) => (
                 <div
-                  key={exam.id}
+                  key={result.id}
                   className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <p className="font-semibold text-slate-900">
-                        {exam.name}
+                        {result.examName}
                       </p>
                       <p className="mt-1 text-sm text-slate-600">
-                        {exam.subjectName} • Section {exam.sectionName}
+                        {result.subjectName} • {result.sectionName}
                       </p>
                     </div>
-                    <p className="text-xs font-medium text-slate-500">
-                      {formatDate(exam.examDate)}
-                    </p>
+                    <div className="flex flex-col items-end">
+                      <p className="text-sm font-semibold text-slate-900">
+                        {result.marks}/{result.maxMarks}
+                      </p>
+                      <p className="text-xs text-slate-500">
+                        {((result.marks / result.maxMarks) * 100).toFixed(1)}%
+                      </p>
+                    </div>
                   </div>
-                  <p className="mt-2 text-xs uppercase tracking-[0.18em] text-slate-400">
-                    Max marks {exam.maxMarks} •{" "}
-                    {exam.resultPublished
-                      ? "Published"
-                      : exam.locked
-                        ? "Locked"
-                        : "Draft"}
-                  </p>
                 </div>
               ))
             ) : (
               <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-6 text-sm text-slate-500">
-                No exams found.
+                No published results yet.
               </div>
             )}
           </div>
         </SectionCard>
       </div>
+
+      <SectionCard
+        title="Latest Notices"
+        description="Recent announcements and updates."
+        icon={Bell}
+      >
+        <div className="space-y-3">
+          {notices.length ? (
+            notices.map((notice) => (
+              <div
+                key={notice.id}
+                className="rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-blue-200 hover:bg-blue-50/60"
+              >
+                <div className="flex items-start gap-3">
+                  <div className="mt-1 rounded-xl bg-blue-100 p-2 text-blue-700">
+                    <AlertCircle className="h-4 w-4" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-semibold text-slate-900">
+                      {notice.title}
+                    </p>
+                    <p className="mt-1 line-clamp-2 text-sm text-slate-600">
+                      {notice.content}
+                    </p>
+                    <p className="mt-2 text-xs text-slate-500">
+                      {formatDate(notice.createdAt)}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-6 text-sm text-slate-500">
+              No notices yet.
+            </div>
+          )}
+        </div>
+      </SectionCard>
     </div>
   );
 }

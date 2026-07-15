@@ -30,7 +30,8 @@ export default function StudentsPage() {
     handleFilterChange,
 
     departments,
-    semesters,
+    programs,
+    batches,
 
     refresh,
   } = useStudents();
@@ -90,9 +91,15 @@ export default function StudentsPage() {
         filterOptions={{
           departmentId: departments,
 
-          semesterId: semesters.map((semester) => ({
-            id: semester.semesterNumber,
-            name: `Semester ${semester.semesterNumber}`,
+          
+          programId: programs.map((program) => ({
+            id: program.id,
+            name: program.name,
+          })),
+
+          batchId: batches.map((batch) => ({
+            id: batch.id,
+            name: batch.name,
           })),
         }}
         onFilterChange={handleFilterChange}
