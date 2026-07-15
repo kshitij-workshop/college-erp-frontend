@@ -104,10 +104,10 @@ export const sidebarItems = [
     icon: BookOpen,
     href: "/dashboard/timetable",
   },
-  // {
-  //   title: "Settings",
-  //   icon: Settings,
-  //   href: "/dashboard/settings",
-  // },
+  {
+    title: "Settings",
+    icon: Settings,
+    href: "/dashboard/settings",
+  },
   
 ];

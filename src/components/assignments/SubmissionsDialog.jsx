@@ -101,7 +101,7 @@ export default function SubmissionsDialog({ assignment, open, onOpenChange }) {
                   <TableCell>
                     <p className="font-medium">{submission.studentName}</p>
                     <p className="text-xs text-muted-foreground">
-                      {submission.enrollmentNumber ?? "—"}
+                      {submission.registrationNumber ?? "—"}
                     </p>
                   </TableCell>
                   <TableCell>

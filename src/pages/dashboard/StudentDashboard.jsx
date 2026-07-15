@@ -179,7 +179,6 @@ export default function StudentDashboard() {
       }
     }
     loadTodayClasses();
-    loadTodayClasses();
     loadStudentResults();
     loadNotices();
     loadMySubjectOfferings();
