@@ -10,7 +10,7 @@ export function useSubjects() {
   const [subjects, setSubjects] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
 
   const [keyword, setKeyword] = useState("");
 
@@ -79,7 +79,7 @@ export function useSubjects() {
 
     const totalPages = Math.max(1, Math.ceil(totalElements / PAGE_SIZE));
 
-    const start = (page - 1) * PAGE_SIZE;
+    const start = page * PAGE_SIZE;
 
     const end = start + PAGE_SIZE;
 
@@ -93,7 +93,7 @@ export function useSubjects() {
   }, [filteredSubjects, page]);
 
   function handleFilterChange(name, value) {
-    setPage(1);
+    setPage(0);
 
     setFilters((previous) => ({
       ...previous,
@@ -103,7 +103,7 @@ export function useSubjects() {
   }
 
   useEffect(() => {
-    setPage(1);
+    setPage(0);
   }, [keyword]);
 
   return {

@@ -34,15 +34,16 @@ export const sidebarItems = [
     icon: CalendarRange,
     href: "/dashboard/attendance",
   },
-  {
-    title: "Exams",
-    icon: ClipboardList,
-    href: "/dashboard/exams",
-  },
+  
   {
     title: "Assignments",
     icon: ClipboardPenLine,
     href: "/dashboard/assignments",
+  },
+  {
+    title: "Exams",
+    icon: ClipboardList,
+    href: "/dashboard/exams",
   },
   {
     title: "Notices",

@@ -61,3 +61,7 @@ export function getAttendancePercentage(studentId) {
 export function getAttendanceHistory() {
   return api.get("/attendance/history");
 }
+
+export async function getStudentAttendanceDashboard() {
+    return api.get("/attendance/my/dashboard");
+}

@@ -291,8 +291,8 @@ export default function FacultyDashboard() {
                       </p>
                     </div>
                     <p className="text-xs font-medium text-slate-500">
-                      {formatDateTime(`${today}T${classItem.startTime}`)} -{" "}
-                      {formatDateTime(`${today}T${classItem.endTime}`)}
+                      {formatDateTime(`${classItem.startTime}`)} -{" "}
+                      {formatDateTime(`${classItem.endTime}`)}
                     </p>
                   </div>
                   <div className="mt-3 flex flex-wrap gap-3 text-sm text-slate-600">
