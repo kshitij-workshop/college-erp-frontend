@@ -8,12 +8,20 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 
-import { useAttendance } from "@/hooks/useAttendance";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs";
 
+import { useAttendance } from "@/hooks/useAttendance";
 
 import TodayClasses from "@/components/attendance/TodayClasses";
 import StudentAttendanceTable from "@/components/attendance/StudentAttendanceTable";
 import AttendanceSummary from "@/components/attendance/AttendanceSummary";
+import AttendanceAnalytics from "@/components/attendance/analytic/AttendanceAnalytics";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -54,123 +62,193 @@ export default function AttendancePage() {
     markAllPresent,
 
     attendanceMarked,
-
   } = useAttendance();
 
   const [open, setOpen] = useState(false);
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-
       <PageHeader
         title="Attendance"
-        description="Mark attendance for today's classes."
+        description="Manage attendance records."
         buttonText="Attendance History"
         buttonIcon={History}
         onButtonClick={() => navigate("/dashboard/attendance/history")}
       />
 
-      {/* Date */}
+      <Tabs defaultValue="mark" className="space-y-6">
 
-      <Card>
-        <CardContent className="flex flex-col gap-4 p-6 md:flex-row md:items-center md:justify-between">
-          <div>
-            <h3 className="font-semibold">Select Date</h3>
+        <TabsList>
 
-            <p className="text-sm text-slate-500">
-              Choose a date to view your scheduled classes.
-            </p>
+          <TabsTrigger value="mark">
+            Mark Attendance
+          </TabsTrigger>
+
+          <TabsTrigger value="analytics">
+            Attendance Analytics
+          </TabsTrigger>
+
+        </TabsList>
+
+        {/* ========================= */}
+        {/* MARK ATTENDANCE */}
+        {/* ========================= */}
+
+        <TabsContent value="mark" className="space-y-6">
+
+          <Card>
+            <CardContent className="flex flex-col gap-4 p-6 md:flex-row md:items-center md:justify-between">
+
+              <div>
+
+                <h3 className="font-semibold">
+                  Select Date
+                </h3>
+
+                <p className="text-sm text-slate-500">
+                  Choose a date to view your scheduled classes.
+                </p>
+
+              </div>
+
+              <Input
+                type="date"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+                className="w-full md:w-56"
+              />
+
+            </CardContent>
+          </Card>
+
+          <div className="space-y-2">
+
+            <h2 className="text-lg font-semibold">
+              Today's Classes
+            </h2>
+
+            <TodayClasses
+              classes={classes}
+              selectedClass={selectedClass}
+              onSelect={selectClass}
+              loading={loadingClasses}
+            />
+
           </div>
 
-          <Input
-            type="date"
-            value={selectedDate}
-            onChange={(e) => setSelectedDate(e.target.value)}
-            className="w-full md:w-56"
-          />
-        </CardContent>
-      </Card>
+          {students.length > 0 && (
+            <AttendanceSummary summary={summary} />
+          )}
 
-      {/* Today's Classes */}
+          <div className="space-y-3">
 
-      <div className="space-y-2">
-        <h2 className="text-lg font-semibold">Today's Classes</h2>
+            <div className="flex items-center justify-between">
 
-        <TodayClasses
-          classes={classes}
-          selectedClass={selectedClass}
-          onSelect={selectClass}
-          loading={loadingClasses}
-        />
-      </div>
+              <h2 className="text-lg font-semibold">
+                Students
+              </h2>
 
-      {/* Summary */}
+              <Button
+                variant="outline"
+                onClick={markAllPresent}
+                disabled={!students.length}
+              >
+                Mark All Present
+              </Button>
 
-      {students.length > 0 && <AttendanceSummary summary={summary} />}
+            </div>
 
-      {/* Students */}
+            <StudentAttendanceTable
+              students={students}
+              attendance={attendance}
+              onStatusChange={updateAttendance}
+              loading={loadingStudents}
+            />
 
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold">Students</h2>
+          </div>
 
-          <Button
-            variant="outline"
-            onClick={markAllPresent}
-            disabled={!students.length}
-          >
-            Mark All Present
-          </Button>
-        </div>
+          {students.length > 0 && (
 
-        <StudentAttendanceTable
-          students={students}
-          attendance={attendance}
-          onStatusChange={updateAttendance}
-          loading={loadingStudents}
-        />
-      </div>
+            <div className="flex justify-end">
 
-      {/* Save */}
+              <Button
+                size="lg"
+                onClick={() => setOpen(true)}
+                disabled={saving}
+              >
 
-      {students.length > 0 && (
-        <div className="flex justify-end">
-          <Button size="lg" onClick={() => setOpen(true)} disabled={saving}>
-            <Save className="mr-2 h-4 w-4" />
+                <Save className="mr-2 h-4 w-4" />
 
-            {saving ? "Saving..." : attendanceMarked ? "Update Attendance" : "Submit Attendance"}
-          </Button>
-          
-          <AlertDialog open={open} onOpenChange={setOpen}>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Submit Attendance?</AlertDialogTitle>
+                {saving
+                  ? "Saving..."
+                  : attendanceMarked
+                  ? "Update Attendance"
+                  : "Submit Attendance"}
 
-                <AlertDialogDescription>
-                  You are about to submit attendance for{" "}
-                  <strong>{selectedClass?.subjectName}</strong>.
-                  <br />
-                  This action cannot be undone.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
+              </Button>
 
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
+            </div>
 
-                <AlertDialogAction
-                  onClick={async () => {
-                    await saveAttendance();
-                    setOpen(false);
-                  }}
-                >
-                  Submit Attendance
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        </div>
-      )}
+          )}
+
+        </TabsContent>
+
+        {/* ========================= */}
+        {/* ANALYTICS */}
+        {/* ========================= */}
+
+        <TabsContent value="analytics">
+
+          <AttendanceAnalytics />
+
+        </TabsContent>
+
+      </Tabs>
+
+      <AlertDialog open={open} onOpenChange={setOpen}>
+
+        <AlertDialogContent>
+
+          <AlertDialogHeader>
+
+            <AlertDialogTitle>
+              Submit Attendance?
+            </AlertDialogTitle>
+
+            <AlertDialogDescription>
+
+              You are about to submit attendance for{" "}
+              <strong>{selectedClass?.subjectName}</strong>.
+
+              <br />
+
+              This action cannot be undone.
+
+            </AlertDialogDescription>
+
+          </AlertDialogHeader>
+
+          <AlertDialogFooter>
+
+            <AlertDialogCancel>
+              Cancel
+            </AlertDialogCancel>
+
+            <AlertDialogAction
+              onClick={async () => {
+                await saveAttendance();
+                setOpen(false);
+              }}
+            >
+              Submit Attendance
+            </AlertDialogAction>
+
+          </AlertDialogFooter>
+
+        </AlertDialogContent>
+
+      </AlertDialog>
+
     </div>
   );
 }

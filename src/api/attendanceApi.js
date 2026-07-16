@@ -65,3 +65,36 @@ export function getAttendanceHistory() {
 export async function getStudentAttendanceDashboard() {
     return api.get("/attendance/my/dashboard");
 }
+
+// attendanceApi.js
+
+export async function getAttendanceAnalytics(subjectOfferingId) {
+
+    return api.get(
+        `/attendance/analytics/${subjectOfferingId}`
+    );
+
+}
+
+export async function getStudentAttendanceDetails(
+    studentId,
+    subjectOfferingId
+) {
+
+    return api.get(
+        `/attendance/student/${studentId}/subject/${subjectOfferingId}`
+    );
+
+}
+
+export async function getMySubjectOfferings() {
+  return api.get("/subject-offerings/my");
+}
+
+export async function getBatchAttendanceAnalytics(batchId) {
+  return api.get(`/attendance/analytics/batch/${batchId}`);
+}
+
+export async function getStudentOverallAttendance(studentId) {
+  return api.get(`/attendance/student/${studentId}`);
+}

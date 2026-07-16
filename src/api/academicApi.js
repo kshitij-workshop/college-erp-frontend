@@ -30,3 +30,15 @@ export function getAllBatches() {
     return api.get("/batches");
 }
 
+export function getAllDepartments() {
+    return api.get("/departments");
+}
+
+export function getProgramsByDepartment(departmentId) {
+    return api.get(`/programs/department/${departmentId}`);
+}
+
+export function getBatchesByProgram(programId) {
+    return api.get(`/batches/program/${programId}`);
+} 
+
