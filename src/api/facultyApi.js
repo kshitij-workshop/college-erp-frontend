@@ -14,3 +14,6 @@ export const deleteFaculty = (id) =>
 
 export const getFacultyById = (id) =>
   api.get(`/faculty/${id}`);
+
+export const getCurrentFaculty = () =>
+  api.get("/faculty/me");

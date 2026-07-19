@@ -98,3 +98,11 @@ export async function getBatchAttendanceAnalytics(batchId) {
 export async function getStudentOverallAttendance(studentId) {
   return api.get(`/attendance/student/${studentId}`);
 }
+
+export async function getDepartmentSubjectOfferings() {
+
+    return api.get(
+        "/subject-offerings/my-department"
+    );
+
+}

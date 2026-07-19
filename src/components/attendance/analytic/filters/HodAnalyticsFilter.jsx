@@ -6,32 +6,33 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export default function AdminAnalyticsFilter({
-  useAnalyticsHook,
+import { useHodAttendanceAnalytics } from "@/hooks/useHodAttendanceAnalytics.js";
+
+export default function HodAnalyticsFilter({
   setStudents,
   setLoading,
+  setSelectedOfferingId,
 }) {
   const {
-    departments = [],
-    programs = [],
-    batches = [],
+    loadingFilters,
 
-    departmentId = "",
-    setDepartmentId = () => {},
+    programs,
+    batches,
+    subjects,
 
     programId,
     setProgramId,
 
-    batchId,
-    setBatchId,
+    batchName,
+    setBatchName,
 
-    loadingFilters,
-  } = useAnalyticsHook({
+    subjectOfferingId,
+    setSubjectOfferingId,
+  } = useHodAttendanceAnalytics({
     setStudents,
     setLoading,
+    setSelectedOfferingId,
   });
-
-  const hasDepartments = departments.length > 0;
 
   return (
     <div className="rounded-3xl border bg-white p-6 shadow-sm">
@@ -41,44 +42,18 @@ export default function AdminAnalyticsFilter({
         </h2>
 
         <p className="text-sm text-muted-foreground">
-          View overall attendance batch-wise.
+          View attendance analytics for your department.
         </p>
       </div>
 
-      <div
-        className={`grid gap-4 ${
-          hasDepartments ? "md:grid-cols-3" : "md:grid-cols-2"
-        }`}
-      >
-        {/* Department (Admin only) */}
-        {hasDepartments && (
-          <Select
-            value={departmentId}
-            onValueChange={setDepartmentId}
-            disabled={loadingFilters}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Department" />
-            </SelectTrigger>
-
-            <SelectContent>
-              {departments.map((department) => (
-                <SelectItem
-                  key={department.id}
-                  value={String(department.id)}
-                >
-                  {department.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        )}
+      <div className="grid gap-4 md:grid-cols-3">
 
         {/* Program */}
+
         <Select
           value={programId}
           onValueChange={setProgramId}
-          disabled={hasDepartments ? !departmentId : loadingFilters}
+          disabled={loadingFilters}
         >
           <SelectTrigger>
             <SelectValue placeholder="Program" />
@@ -97,9 +72,10 @@ export default function AdminAnalyticsFilter({
         </Select>
 
         {/* Batch */}
+
         <Select
-          value={batchId}
-          onValueChange={setBatchId}
+          value={batchName}
+          onValueChange={setBatchName}
           disabled={!programId}
         >
           <SelectTrigger>
@@ -110,13 +86,38 @@ export default function AdminAnalyticsFilter({
             {batches.map((batch) => (
               <SelectItem
                 key={batch.id}
-                value={String(batch.id)}
+                value={batch.id}
               >
                 {batch.name}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
+
+        {/* Subject */}
+
+        <Select
+          value={subjectOfferingId}
+          onValueChange={setSubjectOfferingId}
+          disabled={!batchName}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Subject" />
+          </SelectTrigger>
+
+          <SelectContent>
+            {subjects.map((subject) => (
+              <SelectItem
+                key={subject.id}
+                value={String(subject.id)}
+              >
+                {subject.subjectCode} • {subject.subjectName} • Sec{" "}
+                {subject.sectionName}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
       </div>
     </div>
   );

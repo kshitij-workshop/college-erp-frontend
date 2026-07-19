@@ -62,7 +62,7 @@ export default function StudentAttendanceTable({
       {/* Header */}
 
       <div className="grid grid-cols-12 border-b bg-slate-50 px-6 py-4 font-semibold text-slate-700">
-        <div className="col-span-2">Roll No.</div>
+        <div className="col-span-2">Registration No.</div>
 
         <div className="col-span-4">Student</div>
 

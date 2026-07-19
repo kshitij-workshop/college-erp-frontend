@@ -221,7 +221,7 @@ export default function FacultyDashboard() {
 
         <div className="grid gap-3 pt-2 sm:grid-cols-2 xl:grid-cols-4">
           <StatRow icon={Mail} label="Email" value={email} />
-          <StatRow icon={Bell} label="Role" value={user?.role || "FACULTY"} />
+          <StatRow icon={Bell} label="Role" value={facultyDashboard?.designation || "FACULTY"} />
           <StatRow icon={Building2} label="Department" value={facultyDashboard?.departmentName || "FACULTY"} />
           <StatRow icon={Bell} label="EMP-CODE" value={facultyDashboard?.employeeCode || "FACULTY"} />
 

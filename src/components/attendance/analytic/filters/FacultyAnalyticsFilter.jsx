@@ -62,8 +62,7 @@ export default function FacultyAnalyticsFilter({
                 key={offering.id}
                 value={String(offering.id)}
               >
-                {offering.subjectCode} • {offering.subjectName} •{" "}
-                {offering.sectionName}
+                {offering.subjectName} • {offering.departmentCode} - {offering.sectionName}
               </SelectItem>
             ))}
           </SelectContent>

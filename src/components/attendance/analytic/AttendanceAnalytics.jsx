@@ -1,159 +1,3 @@
-// import { useMemo, useState } from "react";
-
-// import { Search } from "lucide-react";
-
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/components/ui/select";
-
-// import { Input } from "@/components/ui/input";
-
-// import StudentAttendanceDetailsDialog from "../StudentAttendanceDetailsDialog";
-// import AttendanceAnalyticsTable from "./AttendanceAnalyticsTable";
-
-// import { useAttendanceAnalytics } from "@/hooks/useAttendanceAnalytics";
-
-// export default function AttendanceAnalytics() {
-
-
-//   const [search, setSearch] = useState("");
-
-//   const [selectedStudent, setSelectedStudent] = useState(null);
-
-//   const [dialogOpen, setDialogOpen] = useState(false);
-
-//   const {
-
-//     offerings,
-
-//     selectedOffering,
-
-//     setSelectedOffering,
-
-//     students,
-
-//     loadingOfferings,
-
-//     loadingStudents,
-
-// } = useAttendanceAnalytics();
-
-//   function handleView(student) {
-
-//     setSelectedStudent(student);
-
-//     setDialogOpen(true);
-
-//   }
-
-//   const filteredStudents = useMemo(() => {
-
-//     return students.filter(student =>
-
-//       student.studentName
-//         .toLowerCase()
-//         .includes(search.toLowerCase()) ||
-
-//       String(student.registrationNumber)
-//         .includes(search)
-
-//     );
-
-//   }, [students, search]);
-
-//   return (
-
-//     <div className="space-y-6">
-
-//       <div className="rounded-3xl border bg-white p-6 shadow-sm">
-
-//         <h2 className="text-xl font-semibold">
-//           Student Attendance Analytics
-//         </h2>
-
-//         <p className="mt-1 text-sm text-muted-foreground">
-//           View attendance percentage of students for each subject offering.
-//         </p>
-
-//         <div className="mt-6 grid gap-4 lg:grid-cols-2">
-
-//           <Select
-//             value={selectedOffering}
-//             onValueChange={setSelectedOffering}
-//           >
-
-//             <SelectTrigger>
-
-//               <SelectValue placeholder="Select Subject Offering" />
-
-//             </SelectTrigger>
-
-//             <SelectContent>
-
-//               {offerings.map(offering => (
-
-//                 <SelectItem
-//                   key={offering.id}
-//                   value={String(offering.id)}
-//                 >
-
-//                   {offering.subjectName} • {offering.departmentCode}-{offering.sectionName} • {offering.batchName}
-
-//                 </SelectItem>
-
-//               ))}
-
-//             </SelectContent>
-
-//           </Select>
-
-//           <div className="relative">
-
-//             <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
-
-//             <Input
-//               className="pl-10"
-//               placeholder="Search student..."
-//               value={search}
-//               onChange={(e) =>
-//                 setSearch(e.target.value)
-//               }
-//             />
-
-//           </div>
-
-//         </div>
-
-//       </div>
-
-//       {selectedOffering && (
-
-//       <AttendanceAnalyticsTable
-//     students={filteredStudents}
-//     subjectOfferingId={selectedOffering}
-//     onView={handleView}
-// />
-
-//       )}
-
-//       <StudentAttendanceDetailsDialog
-//         open={dialogOpen}
-//         onOpenChange={setDialogOpen}
-//         student={selectedStudent}
-//         subjectOfferingId={selectedOffering}
-//       />
-
-//     </div>
-
-//   );
-
-// }
-
-
 import { useMemo, useState } from "react";
 
 import { Input } from "@/components/ui/input";
@@ -168,10 +12,14 @@ import {
 import { Search } from "lucide-react";
 
 import { useAuth } from "@/hooks/useAuth";
+import { useCurrentFaculty } from "@/hooks/useCurrentFaculty";
 
 import AttendanceAnalyticsTable from "./AttendanceAnalyticsTable";
+import { useBatchAttendanceAnalytics } from "@/hooks/useBatchAttendanceAnalytics";
+import { useHodBatchAttendanceAnalytics } from "@/hooks/useHodBatchAttendanceAnalytics";
 
 import AdminAnalyticsFilter from "./filters/AdminAnalyticsFilter";
+import HodAnalyticsFilter from "./filters/HodAnalyticsFilter";
 import FacultyAnalyticsFilter from "./filters/FacultyAnalyticsFilter";
 
 import AdminStudentAttendanceDialog from "@/components/attendance/analytic/dialog/AdminStudentAttendanceDialog";
@@ -193,122 +41,114 @@ export default function AttendanceAnalytics() {
 
   const [detailsOpen, setDetailsOpen] = useState(false);
 
+  const { faculty } = useCurrentFaculty();
+
+const isAdmin = user?.role === "ADMIN";
+
+const isHod =
+  user?.role === "FACULTY" &&
+  faculty?.designation === "HOD";
+  console.log(user);
+console.log(faculty);
+console.log(isHod);
 
   function handleView(student) {
     setSelectedStudent(student);
     setDetailsOpen(true);
   }
 
-const filteredStudents = useMemo(() => {
-  const keyword = search.trim().toLowerCase();
+  const filteredStudents = useMemo(() => {
+    const keyword = search.trim().toLowerCase();
 
-  return students.filter((student) => {
-    const matchesSearch =
-      student.studentName.toLowerCase().includes(keyword) ||
-      String(student.registrationNumber).includes(keyword);
+    return students.filter((student) => {
+      const matchesSearch =
+        student.studentName.toLowerCase().includes(keyword) ||
+        String(student.registrationNumber).includes(keyword);
 
-    const percentage = student.percentage;
+      const percentage = student.percentage;
 
-    let matchesAttendance = true;
+      let matchesAttendance = true;
 
-    switch (attendanceFilter) {
-      case "90":
-        matchesAttendance = percentage >= 90;
-        break;
+      switch (attendanceFilter) {
+        case "90":
+          matchesAttendance = percentage >= 90;
+          break;
 
-      case "75":
-        matchesAttendance =
-          percentage >= 75 && percentage < 90;
-        break;
+        case "75":
+          matchesAttendance = percentage >= 75 && percentage < 90;
+          break;
 
-      case "60":
-        matchesAttendance =
-          percentage >= 60 && percentage < 75;
-        break;
+        case "60":
+          matchesAttendance = percentage >= 60 && percentage < 75;
+          break;
 
-      case "LOW":
-        matchesAttendance = percentage < 60;
-        break;
+        case "LOW":
+          matchesAttendance = percentage < 60;
+          break;
 
-      default:
-        matchesAttendance = true;
-    }
+        default:
+          matchesAttendance = true;
+      }
 
-    return matchesSearch && matchesAttendance;
-  });
-}, [students, search, attendanceFilter]);
+      return matchesSearch && matchesAttendance;
+    });
+  }, [students, search, attendanceFilter]);
 
-  const isAdmin = user?.role === "ADMIN";
+
 
   return (
     <div className="space-y-6">
-
       {isAdmin ? (
-    <AdminAnalyticsFilter
-        setStudents={setStudents}
-        setLoading={setLoading}
-    />
-) : (
-    <FacultyAnalyticsFilter
-        setStudents={setStudents}
-        setLoading={setLoading}
-        setSelectedOfferingId={setSelectedOfferingId}
-    />
-)}
+        <AdminAnalyticsFilter
+        useAnalyticsHook={useBatchAttendanceAnalytics}
+          setStudents={setStudents}
+          setLoading={setLoading}
+        />
+      ) : isHod ? (
+        <HodAnalyticsFilter
+          useAnalyticsHook={useHodBatchAttendanceAnalytics}
+          setStudents={setStudents}
+          setLoading={setLoading}
+          setSelectedOfferingId={setSelectedOfferingId}
+        />
+      ) : (
+        <FacultyAnalyticsFilter
+          setStudents={setStudents}
+          setLoading={setLoading}
+          setSelectedOfferingId={setSelectedOfferingId}
+        />
+      )}
 
       <div className="grid gap-4 md:grid-cols-2">
+        <div className="relative">
+          <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
 
-  <div className="relative">
+          <Input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search student..."
+            className="pl-10"
+          />
+        </div>
 
-    <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+        <Select value={attendanceFilter} onValueChange={setAttendanceFilter}>
+          <SelectTrigger>
+            <SelectValue placeholder="Attendance Filter" />
+          </SelectTrigger>
 
-    <Input
-      value={search}
-      onChange={(e) => setSearch(e.target.value)}
-      placeholder="Search student..."
-      className="pl-10"
-    />
+          <SelectContent>
+            <SelectItem value="ALL">All Students</SelectItem>
 
-  </div>
+            <SelectItem value="90">90% and above</SelectItem>
 
-  <Select
-    value={attendanceFilter}
-    onValueChange={setAttendanceFilter}
-  >
+            <SelectItem value="75">75% - 89%</SelectItem>
 
-    <SelectTrigger>
+            <SelectItem value="60">60% - 74%</SelectItem>
 
-      <SelectValue placeholder="Attendance Filter" />
-
-    </SelectTrigger>
-
-    <SelectContent>
-
-      <SelectItem value="ALL">
-        All Students
-      </SelectItem>
-
-      <SelectItem value="90">
-        90% and above
-      </SelectItem>
-
-      <SelectItem value="75">
-        75% - 89%
-      </SelectItem>
-
-      <SelectItem value="60">
-        60% - 74%
-      </SelectItem>
-
-      <SelectItem value="LOW">
-        Below 60%
-      </SelectItem>
-
-    </SelectContent>
-
-  </Select>
-
-</div>
+            <SelectItem value="LOW">Below 60%</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
 
       <AttendanceAnalyticsTable
         students={filteredStudents}
@@ -330,7 +170,6 @@ const filteredStudents = useMemo(() => {
           subjectOfferingId={selectedOfferingId}
         />
       )}
-
     </div>
   );
 }

@@ -78,7 +78,7 @@ export default function FacultyAssignmentsPage() {
             label: "Subject offering",
             options: offerings,
             getOptionLabel: (offering) =>
-              `${offering.subjectCode} • ${offering.sectionName}`,
+              `${offering.subjectName} • ${offering.departmentCode} - ${offering.sectionName}`,
           },
           status: {
             label: "Status",

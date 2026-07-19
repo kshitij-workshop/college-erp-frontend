@@ -68,19 +68,19 @@ export default function TimetableViewSheet({
       open={open}
       onOpenChange={onOpenChange}
     >
-      <SheetContent className="w-full sm:max-w-2xl p-0 bg-slate-50">
+      {/* 1. Added `flex flex-col` to SheetContent to enable flex layout */}
+      <SheetContent className="flex flex-col w-full sm:max-w-2xl p-0 bg-slate-50">
 
         {loading ? (
-          <div className="space-y-6 p-8">
+          <div className="space-y-6 p-8 flex-1 overflow-y-auto">
             <Skeleton className="mx-auto h-24 w-24 rounded-full" />
             <Skeleton className="mx-auto h-8 w-52" />
             <Skeleton className="h-80 rounded-2xl" />
           </div>
         ) : timetable ? (
           <>
-            {/* Hero */}
-
-            <div className="bg-gradient-to-br from-indigo-600 to-violet-600 px-8 py-10 text-white">
+            {/* 2. Added `shrink-0` so the Hero section doesn't collapse when the content is long */}
+            <div className="shrink-0 bg-gradient-to-br from-indigo-600 to-violet-600 px-8 py-10 text-white">
 
               <div className="flex flex-col items-center">
 
@@ -104,7 +104,8 @@ export default function TimetableViewSheet({
 
             </div>
 
-            <div className="space-y-6 p-8">
+            {/* 3. Added `flex-1 overflow-y-auto` so this section takes the remaining height and scrolls */}
+            <div className="flex-1 overflow-y-auto space-y-6 p-8">
 
               <EntitySection
                 icon={BookOpen}
