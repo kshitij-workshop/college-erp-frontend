@@ -10,6 +10,7 @@ import FacultyDashboard from "@/pages/dashboard/FacultyDashboard";
 import StudentDashboard from "@/pages/dashboard/StudentDashboard";
 
 import StudentsPage from "@/pages/students/StudentsPage";
+import Profile from "@/pages/profile/Profile";
 
 import ProtectedRoute from "./ProtectedRoute";
 import FacultyPage from "@/pages/faculty/FacultyPage";
@@ -97,6 +98,15 @@ export default function AppRoutes() {
         <Route path="assignments" element={<AssignmentsPage />} />
         <Route path="notices" element={<NoticesPage />} />
       </Route>
+
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        }
+      />  
 
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

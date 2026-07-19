@@ -47,8 +47,6 @@ export function useAttendance() {
       setAttendance({});
     } catch (error) {
       console.error(error);
-
-      toast.error("Failed to load classes.");
     } finally {
       setLoadingClasses(false);
     }

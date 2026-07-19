@@ -109,6 +109,9 @@ export default function SubmissionsDialog({ assignment, open, onOpenChange }) {
                     {submission.late && (
                       <Badge variant="destructive">Late</Badge>
                     )}
+                    {submission.status === "RESUBMITTED" && (
+                      <Badge variant="warning">Resubmitted</Badge>
+                    )}
                   </TableCell>
                   <TableCell className="max-w-xs whitespace-normal">
                     {submission.submissionText || "—"}

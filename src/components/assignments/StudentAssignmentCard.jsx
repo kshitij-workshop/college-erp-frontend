@@ -129,35 +129,53 @@ export default function StudentAssignmentCard({
         )}
 
       {/* Buttons */}
+      <br />
 
-      <div className="mt-6 flex gap-3">
+      <div className="flex gap-2">
+  <Button
+    variant="outline"
+    className="flex-1"
+    onClick={() => onView?.(assignment)}
+  >
+    View Details
+  </Button>
+
+  {/* First Submission */}
+  {(!assignment.submissionStatus ||
+    assignment.submissionStatus === "PENDING") && (
+    <Button
+      className="flex-1"
+      onClick={() => onSubmit?.(assignment)}
+    >
+      Submit Assignment
+    </Button>
+  )}
+
+  {/* Submitted / Resubmitted / Graded */}
+  {(assignment.submissionStatus === "SUBMITTED" ||
+    assignment.submissionStatus === "RESUBMITTED" ||
+    assignment.submissionStatus === "GRADED") && (
+    <>
+      <Button
+        variant="secondary"
+        className="flex-1"
+        onClick={() => onViewSubmission?.(assignment)}
+      >
+        View Submission
+      </Button>
+
+      {/* Allow resubmission only before due date */}
+      {new Date() <= new Date(assignment.dueDate) && (
         <Button
-          variant="outline"
           className="flex-1"
-          onClick={() => onView?.(assignment)}
+          onClick={() => onSubmit?.(assignment)}
         >
-          View Details
+          Resubmit
         </Button>
-
-        {(!assignment.submissionStatus ||
-          assignment.submissionStatus === "PENDING") && (
-          <Button className="flex-1" onClick={() => onSubmit?.(assignment)}>
-            Submit Assignment
-          </Button>
-        )}
-
-        {(assignment.submissionStatus === "SUBMITTED" ||
-          assignment.submissionStatus === "GRADED") && (
-          <Button
-            className="flex-1"
-            onClick={() => onViewSubmission?.(assignment)}
-          >
-            View Submission
-          </Button>
-        )}
-
-        
-      </div>
+      )}
+    </>
+  )}
+</div>
     </div>
   );
 }

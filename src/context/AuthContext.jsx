@@ -35,7 +35,8 @@ export default function AuthProvider({ children }) {
   }, []);
 
 const logout = () => {
-  localStorage.clear();
+  localStorage.removeItem("accessToken");
+  localStorage.removeItem("refreshToken");
 
   setUser(null);
 };
